@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Admin - Add New Project</title>
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl w-full max-w-lg">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold">New Project</h2>
+            <a href="index.html" class="text-slate-400 hover:text-indigo-600 text-sm italic">← Back to Site</a>
+        </div>
+        <form id="uploadForm" class="space-y-4">
+            <input type="text" id="title" placeholder="Project Name" class="w-full p-4 border rounded-2xl outline-indigo-500" required>
+            <textarea id="desc" placeholder="Tell more about your work..." class="w-full p-4 border rounded-2xl outline-indigo-500" required></textarea>
+            <input type="text" id="tags" placeholder="Tags (e.g. Flutter, Node.js)" class="w-full p-4 border rounded-2xl">
+            <input type="url" id="img" placeholder="Image URL (Link to screenshot)" class="w-full p-4 border rounded-2xl">
+            <input type="url" id="link" placeholder="Project Link (GitHub/Live)" class="w-full p-4 border rounded-2xl">
+            <button class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">Upload to Portfolio</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const projectData = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('desc').value,
+                tags: document.getElementById('tags').value,
+                image_url: document.getElementById('img').value,
+                link: document.getElementById('link').value
+            };
+
+            const res = await fetch('/api/projects', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(projectData)
+            });
+
+            if (res.ok) {
+                alert("Project Published!");
+                window.location.href = "index.html";
+            }
+        };
+    </script>
+</body>
+</html>
