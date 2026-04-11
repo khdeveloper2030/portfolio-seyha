@@ -19,7 +19,7 @@
             <a href="index.html" class="bg-white border px-5 py-2 rounded-xl text-sm font-semibold hover:bg-slate-50 transition shadow-sm">← បកទៅកាន់ Web</a>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-1 gap-10">
+        <div class="grid grid-cols-1 gap-10">
             
             <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
                 <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
@@ -35,6 +35,25 @@
                     <input type="url" id="link" placeholder="Live Preview / GitHub Link" class="w-full p-4 bg-slate-50 border rounded-2xl outline-indigo-500">
                     <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 uppercase tracking-wider">Publish Project</button>
                 </form>
+            </div>
+
+            <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+                    <span class="bg-amber-100 text-amber-600 p-2 rounded-lg text-sm">📂</span> Manage Projects
+                </h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b text-slate-400 text-sm uppercase tracking-wider">
+                                <th class="py-4 px-2 font-semibold">Title</th>
+                                <th class="py-4 px-2 font-semibold text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="manage-project-list" class="text-slate-700">
+                            <tr><td colspan="2" class="py-10 text-center text-slate-400 italic">កំពុងទាញយកគម្រោង...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
@@ -65,7 +84,6 @@
         async function fetchMessages() {
             try {
                 const res = await fetch('/api/messages');
-                if (!res.ok) throw new Error('Failed to fetch');
                 const data = await res.json();
                 const list = document.getElementById('message-list');
                 
@@ -82,12 +100,46 @@
                     </tr>
                 `).join('');
             } catch (err) { 
-                console.error("Error loading messages:", err);
                 document.getElementById('message-list').innerHTML = '<tr><td colspan="3" class="py-10 text-center text-red-400">មិនអាចទាញយកទិន្នន័យបានទេ</td></tr>';
             }
         }
 
-        // ២. មុខងារបញ្ជូន Project ថ្មី
+        // ២. មុខងារទាញយក Project មកបង្ហាញសម្រាប់លុប
+        async function fetchManageProjects() {
+            try {
+                const res = await fetch('/api/projects');
+                const data = await res.json();
+                const list = document.getElementById('manage-project-list');
+                
+                list.innerHTML = data.map(p => `
+                    <tr class="border-b hover:bg-slate-50 transition duration-300">
+                        <td class="py-4 px-2 font-semibold">${p.title}</td>
+                        <td class="py-4 px-2 text-right">
+                            <button onclick="deleteProject(${p.id})" class="bg-red-50 text-red-600 px-4 py-2 rounded-xl text-sm font-bold hover:bg-red-600 hover:text-white transition">លុប</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                document.getElementById('manage-project-list').innerHTML = '<tr><td colspan="2" class="py-10 text-center text-red-400">Error loading projects</td></tr>';
+            }
+        }
+
+        // ៣. មុខងារលុប Project
+        async function deleteProject(id) {
+            if (confirm("តើលោកគ្រូពិតជាចង់លុបគម្រោងនេះមែនទេ?")) {
+                try {
+                    const res = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        alert("✅ លុបបានជោគជ័យ!");
+                        fetchManageProjects(); // Refresh list
+                    }
+                } catch (err) {
+                    alert("❌ លុបមិនបានសម្រេច: " + err.message);
+                }
+            }
+        }
+
+        // ៤. មុខងារបញ្ជូន Project ថ្មី
         document.getElementById('uploadForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button');
@@ -111,9 +163,7 @@
 
                 if (res.ok) {
                     alert("✅ គម្រោងថ្មីត្រូវបានបង្ហោះដោយជោគជ័យ!");
-                    window.location.reload(); // Reload ដើម្បីសម្អាត Form
-                } else {
-                    alert("❌ មានបញ្ហាក្នុងការបង្ហោះ!");
+                    window.location.reload();
                 }
             } catch (err) {
                 alert("❌ Error: " + err.message);
@@ -123,8 +173,9 @@
             }
         };
 
-        // ដំណើរការ Fetch Messages នៅពេលបើកទំព័រ
+        // ហៅមុខងារទាំងអស់ឱ្យដំណើរការ
         fetchMessages();
+        fetchManageProjects();
     </script>
 </body>
 </html>
