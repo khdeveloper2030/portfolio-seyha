@@ -9,7 +9,7 @@ app.use(express.json());
 
 // ភ្ជាប់ទៅកាន់ Database ដោយប្រើ URL ដែលអ្នកបាន Copy ពី Neon
 const pool = new Pool({
-  connectionString: process.env.POSTGRES_URL + "?sslmode=require",
+  connectionString: process.env.POSTGRES + "?sslmode=require",
 });
 
 // API សម្រាប់ទាញយក Projects មកបង្ហាញលើទំព័រមុខ
