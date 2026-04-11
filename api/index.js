@@ -34,5 +34,31 @@ app.post('/api/projects', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
+// API សម្រាប់ទទួលសារពី Contact Form
+app.post('/api/contact', async (req, res) => {
+  const { name, email, message } = req.body;
+  
+  try {
+    const query = 'INSERT INTO messages (name, email, message) VALUES ($1, $2, $3) RETURNING *';
+    const values = [name, email, message];
+    const result = await pool.query(query, values);
+    
+    res.status(201).json({ 
+      success: true, 
+      message: "សារត្រូវបានបញ្ជូនទៅកាន់ Database រួចរាល់!",
+      data: result.rows[0] 
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "មិនអាចបញ្ជូនសារបានទេ: " + err.message });
+  }
+});
+app.get('/api/messages', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM messages ORDER BY created_at DESC');
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 module.exports = app;
