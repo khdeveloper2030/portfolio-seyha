@@ -7,6 +7,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <title>Admin Dashboard | Seyha Em</title>
     <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+    <script>
+        // ១. មុខងារការពារសុវត្ថិភាព (Simple Login)
+        if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+            const pass = prompt("សូមបញ្ចូលលេខកូដសម្ងាត់ដើម្បីចូលទៅកាន់ Admin:");
+            if (pass === "1234") { // លោកគ្រូអាចប្តូរលេខសម្ងាត់ត្រង់នេះ
+                sessionStorage.setItem('isLoggedIn', 'true');
+            } else {
+                alert("លេខកូដមិនត្រឹមត្រូវ!");
+                window.location.href = "index.html";
+            }
+        }
+    </script>
 </head>
 <body class="bg-slate-50 min-h-screen p-4 md:p-10">
 
@@ -16,37 +28,43 @@
                 <h1 class="text-3xl font-extrabold text-slate-900">Admin <span class="text-indigo-600">Panel</span></h1>
                 <p class="text-slate-500">គ្រប់គ្រងគម្រោង និងសាររបស់អ្នក</p>
             </div>
-            <a href="index.html" class="bg-white border px-5 py-2 rounded-xl text-sm font-semibold hover:bg-slate-50 transition shadow-sm">← បកទៅកាន់ Web</a>
+            <div class="flex gap-4">
+                <button onclick="sessionStorage.clear(); location.reload();" class="text-red-500 text-sm font-bold">Logout</button>
+                <a href="index.html" class="bg-white border px-5 py-2 rounded-xl text-sm font-semibold hover:bg-slate-50 transition shadow-sm">← បកទៅកាន់ Web</a>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 gap-10">
             
             <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
-                <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                    <span class="bg-indigo-100 text-indigo-600 p-2 rounded-lg text-sm">🚀</span> Add New Project
+                <h2 id="form-title" class="text-xl font-bold mb-6 flex items-center gap-2 text-indigo-600">
+                    <span>🚀</span> Add New Project
                 </h2>
                 <form id="uploadForm" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="hidden" id="edit-id"> <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <input type="text" id="title" placeholder="Project Name" class="w-full p-4 bg-slate-50 border rounded-2xl outline-indigo-500" required>
                         <input type="text" id="tags" placeholder="Tags (e.g. Flutter, PHP)" class="w-full p-4 bg-slate-50 border rounded-2xl outline-indigo-500">
                     </div>
                     <textarea id="desc" placeholder="Project Description..." rows="3" class="w-full p-4 bg-slate-50 border rounded-2xl outline-indigo-500" required></textarea>
                     <input type="url" id="img" placeholder="Image URL (Link screenshot)" class="w-full p-4 bg-slate-50 border rounded-2xl outline-indigo-500">
                     <input type="url" id="link" placeholder="Live Preview / GitHub Link" class="w-full p-4 bg-slate-50 border rounded-2xl outline-indigo-500">
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 uppercase tracking-wider">Publish Project</button>
+                    <div class="flex gap-2">
+                        <button type="submit" id="submit-btn" class="flex-grow bg-indigo-600 text-white font-bold py-4 rounded-2xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 uppercase tracking-wider">Publish Project</button>
+                        <button type="button" id="cancel-btn" onclick="resetForm()" class="hidden bg-slate-200 text-slate-600 px-6 rounded-2xl font-bold">Cancel</button>
+                    </div>
                 </form>
             </div>
 
             <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
-                <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                    <span class="bg-amber-100 text-amber-600 p-2 rounded-lg text-sm">📂</span> Manage Projects
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-amber-600">
+                    <span>📂</span> Manage Projects
                 </h2>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b text-slate-400 text-sm uppercase tracking-wider">
                                 <th class="py-4 px-2 font-semibold">Title</th>
-                                <th class="py-4 px-2 font-semibold text-right">Action</th>
+                                <th class="py-4 px-2 font-semibold text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="manage-project-list" class="text-slate-700">
@@ -57,8 +75,8 @@
             </div>
 
             <div class="bg-white p-8 rounded-[2.5rem] shadow-xl border border-slate-100">
-                <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                    <span class="bg-emerald-100 text-emerald-600 p-2 rounded-lg text-sm">📩</span> Inbox (Messages)
+                <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-emerald-600">
+                    <span>📩</span> Inbox (Messages)
                 </h2>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -66,7 +84,7 @@
                             <tr class="border-b text-slate-400 text-sm uppercase tracking-wider">
                                 <th class="py-4 px-2 font-semibold">Sender</th>
                                 <th class="py-4 px-2 font-semibold">Message</th>
-                                <th class="py-4 px-2 font-semibold">Date</th>
+                                <th class="py-4 px-2 font-semibold text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody id="message-list" class="text-slate-700">
@@ -80,72 +98,82 @@
     </div>
 
     <script>
-        // ១. មុខងារទាញយកសារមកបង្ហាញ
+        // ១. ទាញយកសារ និង លុបសារ
         async function fetchMessages() {
             try {
                 const res = await fetch('/api/messages');
                 const data = await res.json();
                 const list = document.getElementById('message-list');
-                
-                if (data.length === 0) {
-                    list.innerHTML = '<tr><td colspan="3" class="py-10 text-center text-slate-400">មិនទាន់មានសារនៅឡើយទេ</td></tr>';
-                    return;
-                }
-
-                list.innerHTML = data.map(m => `
-                    <tr class="border-b hover:bg-slate-50 transition duration-300">
+                list.innerHTML = data.length === 0 ? '<tr><td colspan="3" class="py-10 text-center text-slate-400">គ្មានសារ</td></tr>' : 
+                data.map(m => `
+                    <tr class="border-b hover:bg-slate-50 transition">
                         <td class="py-4 px-2 font-bold text-indigo-600">${m.name}</td>
-                        <td class="py-4 px-2 max-w-xs truncate md:max-w-md">${m.message}</td>
-                        <td class="py-4 px-2 text-xs text-slate-400 whitespace-nowrap">${new Date(m.created_at).toLocaleDateString('km-KH')}</td>
+                        <td class="py-4 px-2 text-sm text-slate-600">${m.message}</td>
+                        <td class="py-4 px-2 text-right">
+                            <button onclick="deleteMessage(${m.id})" class="text-red-400 hover:text-red-600 font-bold">Delete</button>
+                        </td>
                     </tr>
                 `).join('');
-            } catch (err) { 
-                document.getElementById('message-list').innerHTML = '<tr><td colspan="3" class="py-10 text-center text-red-400">មិនអាចទាញយកទិន្នន័យបានទេ</td></tr>';
+            } catch (err) { console.error(err); }
+        }
+
+        async function deleteMessage(id) {
+            if (confirm("លុបសារនេះ?")) {
+                await fetch(`/api/messages/${id}`, { method: 'DELETE' });
+                fetchMessages();
             }
         }
 
-        // ២. មុខងារទាញយក Project មកបង្ហាញសម្រាប់លុប
+        // ២. ទាញយក Project និង រៀបចំ Edit / Delete
         async function fetchManageProjects() {
             try {
                 const res = await fetch('/api/projects');
                 const data = await res.json();
                 const list = document.getElementById('manage-project-list');
-                
                 list.innerHTML = data.map(p => `
-                    <tr class="border-b hover:bg-slate-50 transition duration-300">
+                    <tr class="border-b hover:bg-slate-50 transition">
                         <td class="py-4 px-2 font-semibold">${p.title}</td>
-                        <td class="py-4 px-2 text-right">
+                        <td class="py-4 px-2 text-right flex gap-2 justify-end">
+                            <button onclick='setupEdit(${JSON.stringify(p)})' class="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-xl text-sm font-bold hover:bg-indigo-600 hover:text-white transition">កែ</button>
                             <button onclick="deleteProject(${p.id})" class="bg-red-50 text-red-600 px-4 py-2 rounded-xl text-sm font-bold hover:bg-red-600 hover:text-white transition">លុប</button>
                         </td>
                     </tr>
                 `).join('');
-            } catch (err) {
-                document.getElementById('manage-project-list').innerHTML = '<tr><td colspan="2" class="py-10 text-center text-red-400">Error loading projects</td></tr>';
-            }
+            } catch (err) { console.error(err); }
         }
 
-        // ៣. មុខងារលុប Project
+        function setupEdit(p) {
+            document.getElementById('form-title').innerText = "📝 Edit Project";
+            document.getElementById('submit-btn').innerText = "Update Project";
+            document.getElementById('cancel-btn').classList.remove('hidden');
+            document.getElementById('edit-id').value = p.id;
+            document.getElementById('title').value = p.title;
+            document.getElementById('desc').value = p.description;
+            document.getElementById('tags').value = p.tags;
+            document.getElementById('img').value = p.image_url;
+            document.getElementById('link').value = p.link;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            document.getElementById('uploadForm').reset();
+            document.getElementById('edit-id').value = '';
+            document.getElementById('form-title').innerText = "🚀 Add New Project";
+            document.getElementById('submit-btn').innerText = "Publish Project";
+            document.getElementById('cancel-btn').classList.add('hidden');
+        }
+
         async function deleteProject(id) {
-            if (confirm("តើលោកគ្រូពិតជាចង់លុបគម្រោងនេះមែនទេ?")) {
-                try {
-                    const res = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
-                    if (res.ok) {
-                        alert("✅ លុបបានជោគជ័យ!");
-                        fetchManageProjects(); // Refresh list
-                    }
-                } catch (err) {
-                    alert("❌ លុបមិនបានសម្រេច: " + err.message);
-                }
+            if (confirm("លុបគម្រោងនេះ?")) {
+                await fetch(`/api/projects/${id}`, { method: 'DELETE' });
+                fetchManageProjects();
             }
         }
 
-        // ៤. មុខងារបញ្ជូន Project ថ្មី
+        // ៣. Submit Form (ទាំង Add និង Update)
         document.getElementById('uploadForm').onsubmit = async (e) => {
             e.preventDefault();
-            const btn = e.target.querySelector('button');
-            btn.innerText = "Processing...";
-            btn.disabled = true;
-
+            const id = document.getElementById('edit-id').value;
             const projectData = {
                 title: document.getElementById('title').value,
                 description: document.getElementById('desc').value,
@@ -154,26 +182,23 @@
                 link: document.getElementById('link').value
             };
 
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `/api/projects/${id}` : '/api/projects';
+
             try {
-                const res = await fetch('/api/projects', {
-                    method: 'POST',
+                const res = await fetch(url, {
+                    method: method,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(projectData)
                 });
-
                 if (res.ok) {
-                    alert("✅ គម្រោងថ្មីត្រូវបានបង្ហោះដោយជោគជ័យ!");
-                    window.location.reload();
+                    alert("ជោគជ័យ!");
+                    resetForm();
+                    fetchManageProjects();
                 }
-            } catch (err) {
-                alert("❌ Error: " + err.message);
-            } finally {
-                btn.innerText = "Publish Project";
-                btn.disabled = false;
-            }
+            } catch (err) { alert("Error!"); }
         };
 
-        // ហៅមុខងារទាំងអស់ឱ្យដំណើរការ
         fetchMessages();
         fetchManageProjects();
     </script>

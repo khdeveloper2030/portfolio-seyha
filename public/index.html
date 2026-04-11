@@ -19,7 +19,9 @@
             <div class="flex gap-6 font-semibold text-slate-600 items-center">
                 <a href="#projects" class="hover:text-indigo-600 transition">Projects</a>
                 <a href="#contact" class="hover:text-indigo-600 transition">Contact</a>
-                <a href="admin.html" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm hover:bg-slate-700 transition">Admin</a>
+                <a href="admin.html" class="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2 rounded-full text-sm hover:bg-indigo-700 transition shadow-md shadow-indigo-100">
+                    <span>🔐</span> Login
+                </a>
             </div>
         </div>
     </nav>
@@ -40,7 +42,7 @@
     </section>
 
     <section id="contact" class="max-w-6xl mx-auto px-6 py-24">
-        <div class="bg-indigo-900 rounded-[3rem] p-12 text-white flex flex-col md:flex-row gap-12 shadow-2xl relative overflow-hidden">
+        <div class="bg-indigo-900 rounded-[3rem] p-12 text-white flex flex-col md:flex-row gap-12 shadow-2xl relative overflow-hidden border border-indigo-800">
             <div class="md:w-1/2 z-10">
                 <h2 class="text-4xl font-bold mb-6">Let's Connect</h2>
                 <p class="text-indigo-200 mb-10 text-lg">សម្រាប់ការពិភាក្សាលើគម្រោងថ្មីៗ ឬសាកសួរព័ត៌មានបន្ថែម៖</p>
@@ -56,15 +58,15 @@
                 </div>
             </div>
             
-            <div class="md:w-1/2 bg-white/10 p-8 rounded-3xl backdrop-blur-md border border-white/20 z-10">
+            <div class="md:w-1/2 bg-white/10 p-8 rounded-3xl backdrop-blur-md border border-white/20 z-10 shadow-inner">
                 <form id="contactForm" class="space-y-4">
                     <div>
                         <label class="block text-sm font-semibold mb-2 text-indigo-200">Full Name</label>
-                        <input type="text" id="sender_name" placeholder="Enter your name" class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white transition" required>
+                        <input type="text" id="sender_name" placeholder="Enter your name" class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white transition placeholder:text-indigo-300/50" required>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2 text-indigo-200">Message</label>
-                        <textarea id="sender_message" placeholder="How can I help you?" rows="4" class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white transition" required></textarea>
+                        <textarea id="sender_message" placeholder="How can I help you?" rows="4" class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white transition placeholder:text-indigo-300/50" required></textarea>
                     </div>
                     <button type="submit" id="sendBtn" class="w-full bg-white text-indigo-900 font-bold py-4 rounded-xl hover:bg-indigo-50 transition transform hover:-translate-y-1 active:scale-95 shadow-lg">
                         Send Inquiry
@@ -89,32 +91,33 @@
                 const list = document.getElementById('project-list');
                 
                 if (data.length === 0) {
-                    list.innerHTML = '<p class="col-span-full text-center text-slate-400 italic">No projects found.</p>';
+                    list.innerHTML = '<p class="col-span-full text-center text-slate-400 italic py-20">No projects found.</p>';
                     return;
                 }
 
                 list.innerHTML = data.map(p => `
-                    <div class="bg-white border rounded-3xl overflow-hidden hover:shadow-2xl transition duration-500 group flex flex-col">
-                        <div class="overflow-hidden h-48">
+                    <div class="bg-white border border-slate-100 rounded-3xl overflow-hidden hover:shadow-2xl transition duration-500 group flex flex-col h-full">
+                        <div class="overflow-hidden h-48 bg-slate-100">
                             <img src="${p.image_url || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600'}" 
-                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="${p.title}">
+                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="${p.title}"
+                                 onerror="this.src='https://via.placeholder.com/600x400?text=No+Image'">
                         </div>
                         <div class="p-6 flex flex-col flex-grow">
-                            <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full w-fit mb-4">${p.tags || 'Project'}</span>
-                            <h3 class="text-xl font-bold text-slate-900">${p.title}</h3>
-                            <p class="text-slate-500 text-sm mt-3 flex-grow line-clamp-3">${p.description}</p>
-                            <div class="pt-6 mt-auto border-t border-slate-100">
-                                <a href="${p.link}" target="_blank" class="inline-flex items-center gap-2 font-bold text-indigo-600 hover:text-indigo-800 transition group/btn">
+                            <span class="text-indigo-600 font-bold text-[10px] uppercase tracking-[0.2em] bg-indigo-50 px-3 py-1 rounded-full w-fit mb-4">${p.tags || 'Project'}</span>
+                            <h3 class="text-xl font-bold text-slate-900 line-clamp-1">${p.title}</h3>
+                            <p class="text-slate-500 text-sm mt-3 flex-grow line-clamp-3 leading-relaxed">${p.description}</p>
+                            <div class="pt-6 mt-6 border-t border-slate-50">
+                                <a href="${p.link}" target="_blank" class="inline-flex items-center gap-2 font-bold text-indigo-600 hover:text-indigo-800 transition group/btn text-sm">
                                     Explore Project 
-                                    <span class="group-hover/btn:translate-x-1 transition">→</span>
+                                    <span class="group-hover/btn:translate-x-1 transition duration-300">→</span>
                                 </a>
                             </div>
                         </div>
                     </div>
                 `).join('');
             } catch (err) { 
-                console.error("Error loading projects");
-                document.getElementById('project-list').innerHTML = '<p class="text-red-400 text-center col-span-full">Unable to load projects.</p>';
+                console.error("Error loading projects:", err);
+                document.getElementById('project-list').innerHTML = '<p class="text-red-400 text-center col-span-full">Unable to load projects at this time.</p>';
             }
         }
 
@@ -124,14 +127,13 @@
             const btn = document.getElementById('sendBtn');
             const originalText = btn.innerText;
             
-            // ប្តូរស្ថានភាពប៊ូតុង
             btn.innerText = "Sending...";
             btn.disabled = true;
 
             const messageData = {
                 name: document.getElementById('sender_name').value,
                 message: document.getElementById('sender_message').value,
-                email: "client@example.com" // លោកគ្រូអាចបន្ថែម input email ទៀតក៏បាន
+                email: "visitor@portfolio.dev"
             };
 
             try {
@@ -143,20 +145,19 @@
 
                 if (res.ok) {
                     alert("✅ សាររបស់លោកអ្នកត្រូវបានបញ្ជូនទៅកាន់លោកគ្រូសីហាហើយ!");
-                    e.target.reset(); // សម្អាត Form
+                    e.target.reset();
                 } else {
                     throw new Error("Failed to send");
                 }
             } catch (err) {
                 alert("❌ បញ្ហាបច្ចេកទេស៖ មិនអាចបញ្ជូនសារបានទេ!");
-                console.error(err);
             } finally {
                 btn.innerText = originalText;
                 btn.disabled = false;
             }
         };
 
-        // ដំណើរការដំបូង
+        // Start loading
         fetchProjects();
     </script>
 </body>
