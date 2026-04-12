@@ -18,22 +18,34 @@
       body {
         font-family: "Plus Jakarta Sans", sans-serif;
       }
+      .custom-scrollbar::-webkit-scrollbar {
+        height: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 10px;
+      }
     </style>
   </head>
-  <body class="bg-slate-50 min-h-screen">
+  <body class="bg-slate-50 min-h-screen pb-10">
     <div
       id="login-overlay"
       class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4"
     >
       <div
-        class="bg-white p-10 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center"
+        class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center border border-slate-100"
       >
         <div
-          class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold"
+          class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-indigo-200"
         >
           S
         </div>
-        <h2 class="text-2xl font-bold mb-8">Admin Login</h2>
+        <h2 class="text-2xl font-bold mb-2 text-slate-900 italic">
+          Admin Login
+        </h2>
+        <p class="text-slate-500 mb-8 text-sm px-4">
+          សូមប្រើប្រាស់ Gmail របស់លោកគ្រូសីហា ដើម្បីគ្រប់គ្រងប្រព័ន្ធ
+        </p>
 
         <div
           id="g_id_onload"
@@ -42,7 +54,6 @@
           data-ux_mode="popup"
           data-auto_prompt="false"
         ></div>
-
         <div
           class="g_id_signin flex justify-center"
           data-type="standard"
@@ -59,43 +70,344 @@
       </div>
     </div>
 
-    <div id="admin-content" class="hidden p-4 md:p-10 max-w-5xl mx-auto">
-      <h1 class="text-2xl font-bold">Welcome to Admin Panel</h1>
-      <button
-        onclick="logout()"
-        class="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+    <div id="admin-content" class="hidden p-4 md:p-8 max-w-6xl mx-auto">
+      <div
+        class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 bg-white p-6 rounded-[2rem] border shadow-sm"
       >
-        Logout
-      </button>
+        <div class="flex items-center gap-4">
+          <img
+            id="header-logo"
+            src=""
+            class="w-12 h-12 rounded-full border-2 border-indigo-600 p-0.5 object-cover"
+            onerror="this.src = 'https://via.placeholder.com/150'"
+          />
+          <div>
+            <h1 class="text-xl font-extrabold italic text-slate-900">
+              Seyha<span class="text-indigo-600">.Admin</span>
+            </h1>
+            <p
+              id="user-display"
+              class="text-[10px] text-slate-400 font-bold uppercase tracking-wider"
+            ></p>
+          </div>
+        </div>
+        <div class="flex gap-2 w-full md:w-auto">
+          <button
+            onclick="logout()"
+            class="flex-1 md:flex-none px-6 py-2 border border-red-100 text-red-500 rounded-xl text-xs font-bold hover:bg-red-50 transition"
+          >
+            Logout
+          </button>
+          <a
+            href="index.html"
+            class="flex-1 md:flex-none px-6 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold text-center shadow-lg hover:bg-slate-800 transition"
+            >View Site</a
+          >
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-12">
+          <div
+            class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-indigo-50 flex flex-col md:flex-row items-center gap-6 transition hover:shadow-md"
+          >
+            <img
+              id="preview-logo"
+              src=""
+              class="w-20 h-20 rounded-full border-4 border-slate-50 shadow-md object-cover"
+              onerror="this.src = 'https://via.placeholder.com/150'"
+            />
+            <div class="flex-grow space-y-2 w-full">
+              <h2 class="font-bold text-slate-800 text-sm">
+                Update Developer Profile Logo
+              </h2>
+              <div class="flex flex-col md:flex-row gap-2">
+                <input
+                  type="url"
+                  id="logo-input"
+                  placeholder="Paste New Image URL here..."
+                  class="flex-grow p-3 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500 transition"
+                />
+                <button
+                  onclick="updateLogo()"
+                  class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold text-xs shadow-lg active:scale-95 transition"
+                >
+                  UPDATE LOGO
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div
+            class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border lg:sticky lg:top-8"
+          >
+            <h2
+              id="form-title"
+              class="text-lg font-bold mb-6 text-indigo-600 flex items-center gap-2"
+            >
+              <span>🚀</span> Project Editor
+            </h2>
+            <form id="uploadForm" class="space-y-4">
+              <input type="hidden" id="edit-id" />
+              <input
+                type="text"
+                id="title"
+                placeholder="Project Name"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500 transition"
+                required
+              />
+              <input
+                type="text"
+                id="tags"
+                placeholder="Tags (Flutter, PHP...)"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500 transition"
+              />
+              <textarea
+                id="desc"
+                placeholder="Project Description..."
+                rows="3"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500 transition"
+                required
+              ></textarea>
+              <input
+                type="url"
+                id="img"
+                placeholder="Screenshot Link (URL)"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500 transition"
+              />
+              <input
+                type="url"
+                id="link"
+                placeholder="Live Demo / GitHub Link"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500 transition"
+              />
+              <button
+                type="submit"
+                id="submit-btn"
+                class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition text-sm tracking-wider uppercase"
+              >
+                Save Project
+              </button>
+              <button
+                type="button"
+                id="cancel-btn"
+                onclick="resetForm()"
+                class="hidden w-full bg-slate-100 text-slate-500 py-2 rounded-xl mt-2 font-bold text-xs transition"
+              >
+                Cancel Edit
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 space-y-8">
+          <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
+            <h2
+              class="text-lg font-bold mb-6 text-emerald-600 flex items-center gap-2 italic"
+            >
+              <span>📩</span> Inbox Messages
+            </h2>
+            <div id="message-container" class="space-y-4"></div>
+          </div>
+          <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
+            <h2
+              class="text-lg font-bold mb-6 text-amber-600 flex items-center gap-2 italic"
+            >
+              <span>📂</span> Existing Projects
+            </h2>
+            <div class="overflow-x-auto custom-scrollbar">
+              <table class="w-full text-left min-w-[400px]">
+                <tbody id="manage-project-list"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
+      // --- ១. AUTH LOGIC ---
       function handleCredentialResponse(response) {
-        // បម្លែង Token ពី Google
-        const payload = JSON.parse(atob(response.credential.split(".")[1]));
-
-        if (payload.email === "seyhaemdev@gmail.com") {
-          sessionStorage.setItem("isLoggedIn", "true");
-          sessionStorage.setItem("userName", payload.name);
-          showAdmin();
-        } else {
-          alert("Gmail នេះមិនមានសិទ្ធិចូលប្រើប្រាស់ទេ!");
-          location.reload();
+        try {
+          const payload = JSON.parse(atob(response.credential.split(".")[1]));
+          if (payload.email === "seyhaemdev@gmail.com") {
+            sessionStorage.setItem("isLoggedIn", "true");
+            sessionStorage.setItem("userName", payload.name);
+            showAdmin();
+          } else {
+            alert("Gmail នេះមិនមានសិទ្ធិចូលប្រើប្រាស់ទេ!");
+            location.reload();
+          }
+        } catch (err) {
+          console.error("Login Error:", err);
         }
       }
 
       function showAdmin() {
         document.getElementById("login-overlay").classList.add("hidden");
         document.getElementById("admin-content").classList.remove("hidden");
+        document.getElementById("user-display").innerText =
+          "Logged in as: " + sessionStorage.getItem("userName");
+        fetchProfile();
+        fetchManageProjects();
+        fetchMessages();
       }
 
       function logout() {
         sessionStorage.clear();
         location.reload();
       }
-
-      // Check session on load
       if (sessionStorage.getItem("isLoggedIn") === "true") showAdmin();
+
+      // --- ២. PROFILE LOGIC ---
+      async function fetchProfile() {
+        try {
+          const res = await fetch("/api/profile");
+          const data = await res.json();
+          if (data.logo_url) {
+            document.getElementById("header-logo").src = data.logo_url;
+            document.getElementById("preview-logo").src = data.logo_url;
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      async function updateLogo() {
+        const url = document.getElementById("logo-input").value;
+        if (!url) return alert("សូមបញ្ជាក់ Image URL!");
+        try {
+          await fetch("/api/profile", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ logo_url: url }),
+          });
+          alert("បច្ចុប្បន្នភាព Logo ជោគជ័យ!");
+          fetchProfile();
+        } catch (err) {
+          alert("Error updating logo!");
+        }
+      }
+
+      // --- ៣. MESSAGES LOGIC ---
+      async function fetchMessages() {
+        const res = await fetch("/api/messages");
+        const data = await res.json();
+        const container = document.getElementById("message-container");
+        if (data.length === 0) {
+          container.innerHTML =
+            '<p class="text-slate-400 italic text-sm text-center">No messages yet.</p>';
+          return;
+        }
+
+        container.innerHTML = data
+          .map(
+            (m) => `
+                <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-200 transition">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h3 class="font-bold text-indigo-600 text-sm">${m.name}</h3>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase">${m.email || "Visitor"}</p>
+                        </div>
+                        <button onclick="deleteMessage(${m.id})" class="text-red-400 text-[11px] font-bold hover:text-red-600 transition">Delete</button>
+                    </div>
+                    <p class="text-slate-600 text-xs mb-4 leading-relaxed">${m.message}</p>
+                    <div class="flex gap-2 border-t pt-4">
+                        <a href="mailto:${m.email}?subject=Reply to ${m.name}&body=Hello ${m.name},%0D%0A%0D%0ARegarding your inquiry: ${m.message}" 
+                           class="text-[11px] bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-bold hover:bg-indigo-600 hover:text-white transition flex items-center gap-1">
+                           <span>✉️</span> Reply via Email
+                        </a>
+                    </div>
+                </div>
+            `,
+          )
+          .join("");
+      }
+
+      async function deleteMessage(id) {
+        if (confirm("លុបសារនេះមែនទេ?")) {
+          await fetch(`/api/messages/${id}`, { method: "DELETE" });
+          fetchMessages();
+        }
+      }
+
+      // --- ៤. PROJECTS LOGIC ---
+      async function fetchManageProjects() {
+        const res = await fetch("/api/projects");
+        const data = await res.json();
+        const list = document.getElementById("manage-project-list");
+        list.innerHTML = data
+          .map(
+            (p) => `
+                <tr class="border-b last:border-0 hover:bg-slate-50 transition">
+                    <td class="py-4 pr-4 font-bold text-slate-700 text-sm truncate max-w-[150px]">${p.title}</td>
+                    <td class="py-4 text-right flex gap-2 justify-end">
+                        <button onclick='setupEdit(${JSON.stringify(p)})' class="text-[10px] bg-indigo-50 text-indigo-600 px-4 py-2 rounded-lg font-bold hover:bg-indigo-600 hover:text-white transition">Edit</button>
+                        <button onclick="deleteProject(${p.id})" class="text-[10px] bg-red-50 text-red-500 px-4 py-2 rounded-lg font-bold hover:bg-red-500 hover:text-white transition">Delete</button>
+                    </td>
+                </tr>
+            `,
+          )
+          .join("");
+      }
+
+      function setupEdit(p) {
+        document.getElementById("edit-id").value = p.id;
+        document.getElementById("title").value = p.title;
+        document.getElementById("desc").value = p.description;
+        document.getElementById("tags").value = p.tags;
+        document.getElementById("img").value = p.image_url;
+        document.getElementById("link").value = p.link;
+        document.getElementById("form-title").innerHTML =
+          "📝 Edit Project: <span class='text-slate-900'>" +
+          p.title +
+          "</span>";
+        document.getElementById("submit-btn").innerText = "Update Project";
+        document.getElementById("cancel-btn").classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function resetForm() {
+        document.getElementById("uploadForm").reset();
+        document.getElementById("edit-id").value = "";
+        document.getElementById("form-title").innerHTML =
+          "<span>🚀</span> Project Editor";
+        document.getElementById("submit-btn").innerText = "Save Project";
+        document.getElementById("cancel-btn").classList.add("hidden");
+      }
+
+      async function deleteProject(id) {
+        if (confirm("លុបគម្រោងនេះ?")) {
+          await fetch(`/api/projects/${id}`, { method: "DELETE" });
+          fetchManageProjects();
+        }
+      }
+
+      document.getElementById("uploadForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const id = document.getElementById("edit-id").value;
+        const projectData = {
+          title: document.getElementById("title").value,
+          description: document.getElementById("desc").value,
+          tags: document.getElementById("tags").value,
+          image_url: document.getElementById("img").value,
+          link: document.getElementById("link").value,
+        };
+        const method = id ? "PUT" : "POST";
+        const url = id ? `/api/projects/${id}` : "/api/projects";
+        const res = await fetch(url, {
+          method: method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(projectData),
+        });
+        if (res.ok) {
+          resetForm();
+          fetchManageProjects();
+          alert("ប្រតិបត្តិការជោគជ័យ!");
+        }
+      };
     </script>
   </body>
 </html>
