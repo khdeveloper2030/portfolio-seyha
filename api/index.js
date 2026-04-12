@@ -71,10 +71,11 @@ app.delete('/api/projects/:id', async (req, res) => {
 /** * --- SECTION: MESSAGES (CONTACT) ---
  */
 
-// API: ទទួលសារពី Contact Form
+// API: ទទួលសារពី Contact Form (Update ដើម្បីទទួល Email)
 app.post('/api/contact', async (req, res) => {
-  const { name, email, message } = req.body;
+  const { name, email, message } = req.body; // បន្ថែម email ត្រង់នេះ
   try {
+    // ត្រូវប្រាកដថាTable messages មាន Column 'email'
     const query = 'INSERT INTO messages (name, email, message) VALUES ($1, $2, $3) RETURNING *';
     const values = [name, email, message];
     const result = await pool.query(query, values);
