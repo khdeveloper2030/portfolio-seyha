@@ -1,110 +1,267 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <title>Seyha Em | Portfolio</title>
-    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }</style>
-</head>
-<body class="bg-slate-50 text-slate-900">
-
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        scroll-behavior: smooth;
+      }
+      .mobile-menu {
+        transition: transform 0.3s ease-in-out;
+      }
+      .mobile-menu.closed {
+        transform: translateX(100%);
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 text-slate-900 overflow-x-hidden">
     <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg">S</div>
-                <span class="text-xl font-extrabold tracking-tighter">SEYHA<span class="text-indigo-600">.DEV</span></span>
-            </div>
-            <div class="flex gap-6 font-semibold text-slate-600 items-center">
-                <a href="#projects" class="hover:text-indigo-600 transition">Projects</a>
-                <a href="#contact" class="hover:text-indigo-600 transition">Contact</a>
-                <a href="admin.html" class="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2 rounded-full text-sm hover:bg-indigo-700 transition shadow-md shadow-indigo-100">
-                    <span>🔐</span> Login
-                </a>
-            </div>
+      <div
+        class="max-w-6xl mx-auto px-4 md:px-6 py-4 flex justify-between items-center"
+      >
+        <div class="flex items-center gap-2">
+          <div
+            class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg"
+          >
+            S
+          </div>
+          <span class="text-xl font-extrabold tracking-tighter"
+            >SEYHA<span class="text-indigo-600">.DEV</span></span
+          >
         </div>
+
+        <div
+          class="hidden md:flex gap-8 font-semibold text-slate-600 items-center"
+        >
+          <a href="#projects" class="hover:text-indigo-600 transition"
+            >Projects</a
+          >
+          <a href="#contact" class="hover:text-indigo-600 transition"
+            >Contact</a
+          >
+          <a
+            href="admin.html"
+            class="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2 rounded-full text-sm hover:bg-indigo-700 transition shadow-md"
+          >
+            <span>🔐</span> Login
+          </a>
+        </div>
+
+        <button
+          id="menu-toggle"
+          class="md:hidden text-slate-900 focus:outline-none"
+        >
+          <svg
+            class="w-7 h-7"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16m-7 6h7"
+            ></path>
+          </svg>
+        </button>
+      </div>
     </nav>
 
-    <header class="max-w-6xl mx-auto px-6 py-24 text-center">
-        <div class="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-widest text-indigo-600 uppercase bg-indigo-50 rounded-full">Available for Projects</div>
-        <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight">Full-Stack <span class="text-indigo-600">Developer</span></h1>
-        <p class="text-lg text-slate-500 max-w-2xl mx-auto italic">"ជំរាបសួរ! ខ្ញុំបាទ សីហា ជាគ្រូបង្រៀនផ្នែក ICT និងជាអ្នកបង្កើតកម្មវិធី Web/Mobile ដែលមានបទពិសោធន៍ជាមួយ PHP, Node.js, និង Flutter។"</p>
+    <div
+      id="mobile-menu"
+      class="mobile-menu closed fixed inset-0 z-40 bg-white md:hidden flex flex-col items-center justify-center gap-8 text-2xl font-bold"
+    >
+      <button id="menu-close" class="absolute top-6 right-6 text-slate-900">
+        <svg
+          class="w-8 h-8"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+      <a href="#projects" class="mobile-link hover:text-indigo-600">Projects</a>
+      <a href="#contact" class="mobile-link hover:text-indigo-600">Contact</a>
+      <a
+        href="admin.html"
+        class="bg-indigo-600 text-white px-8 py-3 rounded-full shadow-lg"
+        >Login</a
+      >
+    </div>
+
+    <header class="max-w-6xl mx-auto px-4 md:px-6 py-16 md:py-24 text-center">
+      <div
+        class="inline-block px-4 py-1.5 mb-6 text-xs md:text-sm font-bold tracking-widest text-indigo-600 uppercase bg-indigo-50 rounded-full"
+      >
+        Available for Projects
+      </div>
+      <h1
+        class="text-4xl md:text-7xl font-extrabold mb-6 tracking-tight leading-tight"
+      >
+        Full-Stack <span class="text-indigo-600">Developer</span>
+      </h1>
+      <p
+        class="text-base md:text-lg text-slate-500 max-w-2xl mx-auto italic px-2"
+      >
+        "ជំរាបសួរ! ខ្ញុំបាទ សីហា ជាគ្រូបង្រៀនផ្នែក ICT និងជាអ្នកបង្កើតកម្មវិធី
+        Web/Mobile ដែលមានបទពិសោធន៍ជាមួយ PHP, Node.js, និង Flutter។"
+      </p>
     </header>
 
-    <section id="projects" class="max-w-6xl mx-auto px-6 py-10">
-        <h2 class="text-3xl font-bold mb-10 border-l-4 border-indigo-600 pl-4">My Featured Projects</h2>
-        <div id="project-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="animate-pulse bg-slate-200 h-64 rounded-3xl"></div>
-            <div class="animate-pulse bg-slate-200 h-64 rounded-3xl"></div>
-            <div class="animate-pulse bg-slate-200 h-64 rounded-3xl"></div>
-        </div>
+    <section id="projects" class="max-w-6xl mx-auto px-4 md:px-6 py-10">
+      <h2
+        class="text-2xl md:text-3xl font-bold mb-10 border-l-4 border-indigo-600 pl-4"
+      >
+        My Featured Projects
+      </h2>
+      <div
+        id="project-list"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+      >
+        <div class="animate-pulse bg-slate-200 h-64 rounded-3xl"></div>
+        <div class="animate-pulse bg-slate-200 h-64 rounded-3xl"></div>
+        <div class="animate-pulse bg-slate-200 h-64 rounded-3xl"></div>
+      </div>
     </section>
 
-    <section id="contact" class="max-w-6xl mx-auto px-6 py-24">
-        <div class="bg-indigo-900 rounded-[3rem] p-12 text-white flex flex-col md:flex-row gap-12 shadow-2xl relative overflow-hidden border border-indigo-800">
-            <div class="md:w-1/2 z-10">
-                <h2 class="text-4xl font-bold mb-6">Let's Connect</h2>
-                <p class="text-indigo-200 mb-10 text-lg">សម្រាប់ការពិភាក្សាលើគម្រោងថ្មីៗ ឬសាកសួរព័ត៌មានបន្ថែម៖</p>
-                <div class="space-y-6">
-                    <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10">
-                        <span class="text-3xl">📧</span>
-                        <div><p class="text-sm text-indigo-300">Email</p><p class="font-bold">seyhaemdev@gmail.com</p></div>
-                    </div>
-                    <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10">
-                        <span class="text-3xl">📱</span>
-                        <div><p class="text-sm text-indigo-300">Telegram</p><p class="font-bold">+855 88 123 4567</p></div>
-                    </div>
-                </div>
+    <section id="contact" class="max-w-6xl mx-auto px-4 md:px-6 py-16 md:py-24">
+      <div
+        class="bg-indigo-900 rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 text-white flex flex-col lg:flex-row gap-12 shadow-2xl relative overflow-hidden border border-indigo-800"
+      >
+        <div class="lg:w-1/2 z-10">
+          <h2 class="text-3xl md:text-4xl font-bold mb-6">Let's Connect</h2>
+          <p class="text-indigo-200 mb-10 text-base md:text-lg leading-relaxed">
+            សម្រាប់ការពិភាក្សាលើគម្រោងថ្មីៗ ឬសាកសួរព័ត៌មានបន្ថែម៖
+          </p>
+          <div class="space-y-4 md:space-y-6">
+            <div
+              class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10"
+            >
+              <span class="text-2xl md:text-3xl">📧</span>
+              <div class="overflow-hidden">
+                <p class="text-xs text-indigo-300 uppercase font-bold">Email</p>
+                <p class="font-bold text-sm md:text-base truncate">
+                  seyhaemdev@gmail.com
+                </p>
+              </div>
             </div>
-            
-            <div class="md:w-1/2 bg-white/10 p-8 rounded-3xl backdrop-blur-md border border-white/20 z-10 shadow-inner">
-                <form id="contactForm" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-indigo-200">Full Name</label>
-                        <input type="text" id="sender_name" placeholder="Enter your name" class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white transition placeholder:text-indigo-300/50" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-indigo-200">Message</label>
-                        <textarea id="sender_message" placeholder="How can I help you?" rows="4" class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white transition placeholder:text-indigo-300/50" required></textarea>
-                    </div>
-                    <button type="submit" id="sendBtn" class="w-full bg-white text-indigo-900 font-bold py-4 rounded-xl hover:bg-indigo-50 transition transform hover:-translate-y-1 active:scale-95 shadow-lg">
-                        Send Inquiry
-                    </button>
-                </form>
+            <div
+              class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10"
+            >
+              <span class="text-2xl md:text-3xl">📱</span>
+              <div>
+                <p class="text-xs text-indigo-300 uppercase font-bold">
+                  Telegram
+                </p>
+                <p class="font-bold text-sm md:text-base">+855 88 123 4567</p>
+              </div>
             </div>
-
-            <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20"></div>
+          </div>
         </div>
+
+        <div
+          class="lg:w-1/2 bg-white/10 p-6 md:p-8 rounded-3xl backdrop-blur-md border border-white/20 z-10 shadow-inner"
+        >
+          <form id="contactForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-indigo-200"
+                >Full Name</label
+              >
+              <input
+                type="text"
+                id="sender_name"
+                placeholder="Enter your name"
+                class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white transition placeholder:text-indigo-300/50 text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-indigo-200"
+                >Message</label
+              >
+              <textarea
+                id="sender_message"
+                placeholder="How can I help you?"
+                rows="4"
+                class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white transition placeholder:text-indigo-300/50 text-sm"
+                required
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              id="sendBtn"
+              class="w-full bg-white text-indigo-900 font-bold py-4 rounded-xl hover:bg-indigo-50 transition transform active:scale-95 shadow-lg text-sm md:text-base"
+            >
+              Send Inquiry
+            </button>
+          </form>
+        </div>
+
+        <div
+          class="absolute top-0 right-0 w-64 h-64 bg-indigo-500 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20"
+        ></div>
+      </div>
     </section>
 
-    <footer class="text-center py-10 text-slate-400 border-t bg-white">
-        <p>© 2026 Seyha Em - Crafted with ❤️ using Node.js & Neon Postgres</p>
+    <footer
+      class="text-center py-10 text-slate-400 border-t bg-white px-4 text-xs md:text-sm"
+    >
+      <p>© 2026 Seyha Em - Crafted with ❤️ using Node.js & Neon Postgres</p>
     </footer>
 
     <script>
-        // ១. មុខងារទាញយក Project មកបង្ហាញ
-        async function fetchProjects() {
-            try {
-                const res = await fetch('/api/projects');
-                const data = await res.json();
-                const list = document.getElementById('project-list');
-                
-                if (data.length === 0) {
-                    list.innerHTML = '<p class="col-span-full text-center text-slate-400 italic py-20">No projects found.</p>';
-                    return;
-                }
+      // 0. Mobile Menu Logic
+      const menuToggle = document.getElementById("menu-toggle");
+      const menuClose = document.getElementById("menu-close");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const mobileLinks = document.querySelectorAll(".mobile-link");
 
-                list.innerHTML = data.map(p => `
+      const toggleMenu = () => mobileMenu.classList.toggle("closed");
+
+      menuToggle.addEventListener("click", toggleMenu);
+      menuClose.addEventListener("click", toggleMenu);
+      mobileLinks.forEach((link) => link.addEventListener("click", toggleMenu));
+
+      // ១. មុខងារទាញយក Project មកបង្ហាញ
+      async function fetchProjects() {
+        try {
+          const res = await fetch("/api/projects");
+          const data = await res.json();
+          const list = document.getElementById("project-list");
+
+          if (data.length === 0) {
+            list.innerHTML =
+              '<p class="col-span-full text-center text-slate-400 italic py-20">No projects found.</p>';
+            return;
+          }
+
+          list.innerHTML = data
+            .map(
+              (p) => `
                     <div class="bg-white border border-slate-100 rounded-3xl overflow-hidden hover:shadow-2xl transition duration-500 group flex flex-col h-full">
                         <div class="overflow-hidden h-48 bg-slate-100">
-                            <img src="${p.image_url || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600'}" 
+                            <img src="${p.image_url || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600"}" 
                                  class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="${p.title}"
                                  onerror="this.src='https://via.placeholder.com/600x400?text=No+Image'">
                         </div>
                         <div class="p-6 flex flex-col flex-grow">
-                            <span class="text-indigo-600 font-bold text-[10px] uppercase tracking-[0.2em] bg-indigo-50 px-3 py-1 rounded-full w-fit mb-4">${p.tags || 'Project'}</span>
-                            <h3 class="text-xl font-bold text-slate-900 line-clamp-1">${p.title}</h3>
+                            <span class="text-indigo-600 font-bold text-[10px] uppercase tracking-[0.2em] bg-indigo-50 px-3 py-1 rounded-full w-fit mb-4">${p.tags || "Project"}</span>
+                            <h3 class="text-lg md:text-xl font-bold text-slate-900 line-clamp-1">${p.title}</h3>
                             <p class="text-slate-500 text-sm mt-3 flex-grow line-clamp-3 leading-relaxed">${p.description}</p>
                             <div class="pt-6 mt-6 border-t border-slate-50">
                                 <a href="${p.link}" target="_blank" class="inline-flex items-center gap-2 font-bold text-indigo-600 hover:text-indigo-800 transition group/btn text-sm">
@@ -114,51 +271,53 @@
                             </div>
                         </div>
                     </div>
-                `).join('');
-            } catch (err) { 
-                console.error("Error loading projects:", err);
-                document.getElementById('project-list').innerHTML = '<p class="text-red-400 text-center col-span-full">Unable to load projects at this time.</p>';
-            }
+                `,
+            )
+            .join("");
+        } catch (err) {
+          console.error("Error loading projects:", err);
+          document.getElementById("project-list").innerHTML =
+            '<p class="text-red-400 text-center col-span-full">Unable to load projects at this time.</p>';
         }
+      }
 
-        // ២. មុខងារផ្ញើសារចូល Database
-        document.getElementById('contactForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('sendBtn');
-            const originalText = btn.innerText;
-            
-            btn.innerText = "Sending...";
-            btn.disabled = true;
+      // ២. មុខងារផ្ញើសារចូល Database
+      document.getElementById("contactForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById("sendBtn");
+        const originalText = btn.innerText;
 
-            const messageData = {
-                name: document.getElementById('sender_name').value,
-                message: document.getElementById('sender_message').value,
-                email: "visitor@portfolio.dev"
-            };
+        btn.innerText = "Sending...";
+        btn.disabled = true;
 
-            try {
-                const res = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(messageData)
-                });
-
-                if (res.ok) {
-                    alert("✅ សាររបស់លោកអ្នកត្រូវបានបញ្ជូនទៅកាន់លោកគ្រូសីហាហើយ!");
-                    e.target.reset();
-                } else {
-                    throw new Error("Failed to send");
-                }
-            } catch (err) {
-                alert("❌ បញ្ហាបច្ចេកទេស៖ មិនអាចបញ្ជូនសារបានទេ!");
-            } finally {
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
+        const messageData = {
+          name: document.getElementById("sender_name").value,
+          message: document.getElementById("sender_message").value,
+          email: "visitor@portfolio.dev",
         };
 
-        // Start loading
-        fetchProjects();
+        try {
+          const res = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(messageData),
+          });
+
+          if (res.ok) {
+            alert("✅ សាររបស់លោកអ្នកត្រូវបានបញ្ជូនទៅកាន់លោកគ្រូសីហាហើយ!");
+            e.target.reset();
+          } else {
+            throw new Error("Failed to send");
+          }
+        } catch (err) {
+          alert("❌ បញ្ហាបច្ចេកទេស៖ មិនអាចបញ្ជូនសារបានទេ!");
+        } finally {
+          btn.innerText = originalText;
+          btn.disabled = false;
+        }
+      };
+
+      fetchProjects();
     </script>
-</body>
+  </body>
 </html>
