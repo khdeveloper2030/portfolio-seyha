@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <title>Admin Dashboard | Seyha Em</title>
@@ -24,6 +25,7 @@
             <div id="g_id_onload"
                  data-client_id="479851271829-ou0q6pa3kl4nvjn7d4sikg6ef2v01bhj.apps.googleusercontent.com"
                  data-callback="handleCredentialResponse"
+                 data-ux_mode="popup"
                  data-auto_prompt="false">
             </div>
             <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large"></div>
@@ -41,71 +43,62 @@
             </div>
             <div class="flex gap-2 w-full md:w-auto">
                 <button onclick="logout()" class="flex-1 md:flex-none px-4 py-2 border border-red-100 text-red-500 rounded-xl text-sm font-bold hover:bg-red-50 transition">Logout</button>
-                <a href="index.html" class="flex-1 md:flex-none px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-bold text-center hover:bg-slate-800 transition shadow-lg">View Site</a>
+                <a href="index.html" class="flex-1 md:flex-none px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-bold text-center hover:bg-slate-800 shadow-lg transition">View Site</a>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <div class="lg:col-span-5 space-y-8">
-                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border sticky top-8">
+            <div class="lg:col-span-5">
+                <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border lg:sticky lg:top-8">
                     <h2 id="form-title" class="text-lg font-bold mb-6 flex items-center gap-2 text-indigo-600">
                         <span>🚀</span> Project Editor
                     </h2>
                     <form id="uploadForm" class="space-y-4">
                         <input type="hidden" id="edit-id">
-                        <div class="space-y-4">
-                            <input type="text" id="title" placeholder="Project Name" class="w-full p-4 bg-slate-50 border rounded-xl outline-indigo-500 text-sm transition" required>
-                            <input type="text" id="tags" placeholder="Tags (e.g. Flutter, PHP)" class="w-full p-4 bg-slate-50 border rounded-xl outline-indigo-500 text-sm transition">
-                            <textarea id="desc" placeholder="Description..." rows="3" class="w-full p-4 bg-slate-50 border rounded-xl outline-indigo-500 text-sm transition" required></textarea>
-                            <input type="url" id="img" placeholder="Image URL" class="w-full p-4 bg-slate-50 border rounded-xl outline-indigo-500 text-sm transition">
-                            <input type="url" id="link" placeholder="Live/GitHub Link" class="w-full p-4 bg-slate-50 border rounded-xl outline-indigo-500 text-sm transition">
-                        </div>
+                        <input type="text" id="title" placeholder="Project Name" class="w-full p-4 bg-slate-50 border rounded-xl outline-indigo-500 text-sm" required>
+                        <input type="text" id="tags" placeholder="Tags (e.g. Flutter, PHP)" class="w-full p-4 bg-slate-50 border rounded-xl outline-indigo-500 text-sm">
+                        <textarea id="desc" placeholder="Description..." rows="3" class="w-full p-4 bg-slate-50 border rounded-xl outline-indigo-500 text-sm" required></textarea>
+                        <input type="url" id="img" placeholder="Image URL" class="w-full p-4 bg-slate-50 border rounded-xl outline-indigo-500 text-sm">
+                        <input type="url" id="link" placeholder="Live/GitHub Link" class="w-full p-4 bg-slate-50 border rounded-xl outline-indigo-500 text-sm">
                         <div class="flex gap-2 pt-2">
-                            <button type="submit" id="submit-btn" class="flex-grow bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition text-sm uppercase tracking-wider">Save Project</button>
-                            <button type="button" id="cancel-btn" onclick="resetForm()" class="hidden bg-slate-100 text-slate-500 px-6 rounded-xl font-bold text-sm hover:bg-slate-200 transition">Cancel</button>
+                            <button type="submit" id="submit-btn" class="flex-grow bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition text-sm uppercase">Save Project</button>
+                            <button type="button" id="cancel-btn" onclick="resetForm()" class="hidden bg-slate-100 text-slate-500 px-6 rounded-xl font-bold text-sm">Cancel</button>
                         </div>
                     </form>
                 </div>
             </div>
 
             <div class="lg:col-span-7 space-y-8">
-                
                 <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border">
-                    <h2 class="text-lg font-bold mb-6 flex items-center gap-2 text-emerald-600">
-                        <span>📩</span> Recent Messages
-                    </h2>
-                    <div id="message-container" class="space-y-4">
-                        </div>
+                    <h2 class="text-lg font-bold mb-6 flex items-center gap-2 text-emerald-600"><span>📩</span> Inbox</h2>
+                    <div id="message-container" class="space-y-4"></div>
                 </div>
 
                 <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border">
-                    <h2 class="text-lg font-bold mb-6 flex items-center gap-2 text-amber-600">
-                        <span>📂</span> Manage Projects
-                    </h2>
+                    <h2 class="text-lg font-bold mb-6 flex items-center gap-2 text-amber-600"><span>📂</span> Projects</h2>
                     <div class="overflow-x-auto custom-scrollbar">
                         <table class="w-full text-left min-w-[400px]">
                             <tbody id="manage-project-list"></tbody>
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
     <script>
-        // --- ១. GOOGLE OAUTH LOGIC ---
+        // ១. GOOGLE OAUTH LOGIC
         function handleCredentialResponse(response) {
-            const payload = JSON.parse(atob(response.credential.split('.')[1]));
-            if (payload.email === "seyhaemdev@gmail.com") {
-                sessionStorage.setItem('isLoggedIn', 'true');
-                sessionStorage.setItem('userName', payload.name);
-                showAdmin();
-            } else {
-                alert("សោកស្តាយ! Gmail នេះមិនមានសិទ្ធិចូលប្រើប្រាស់ទេ។");
-                location.reload();
-            }
+            try {
+                const payload = JSON.parse(atob(response.credential.split('.')[1]));
+                if (payload.email === "seyhaemdev@gmail.com") {
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('userName', payload.name);
+                    showAdmin();
+                } else {
+                    alert("Gmail នេះគ្មានសិទ្ធិទេ!");
+                }
+            } catch (e) { console.error("Login Error", e); }
         }
 
         function showAdmin() {
@@ -119,61 +112,49 @@
         function logout() { sessionStorage.clear(); location.reload(); }
         if (sessionStorage.getItem('isLoggedIn') === 'true') showAdmin();
 
-        // --- ២. MESSAGES LOGIC (Responsive Cards + Reply Email) ---
+        // ២. MESSAGES LOGIC (Card Layout for Mobile)
         async function fetchMessages() {
-            try {
-                const res = await fetch('/api/messages');
-                const data = await res.json();
-                const container = document.getElementById('message-container');
-                
-                if (data.length === 0) {
-                    container.innerHTML = '<p class="text-center text-slate-400 py-4 italic text-sm">No messages yet.</p>';
-                    return;
-                }
-
-                container.innerHTML = data.map(m => `
-                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-200 transition group">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-bold text-indigo-600">${m.name}</h3>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider bg-white px-2 py-1 rounded-md border">${new Date(m.created_at || Date.now()).toLocaleDateString()}</span>
-                        </div>
-                        <p class="text-slate-600 text-sm mb-4 leading-relaxed">${m.message}</p>
-                        <div class="flex gap-2 border-t pt-4">
-                            <a href="mailto:?subject=Reply to ${m.name}&body=Hello ${m.name},%0D%0A%0D%0ARegarding your message: ${m.message}" 
-                               class="text-[11px] bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-bold hover:bg-indigo-600 hover:text-white transition flex items-center gap-1">
-                               <span>✉️</span> Reply via Email
-                            </a>
-                            <button onclick="deleteMessage(${m.id})" class="text-[11px] text-red-400 font-bold ml-auto hover:text-red-600 transition">Delete</button>
-                        </div>
+            const res = await fetch('/api/messages');
+            const data = await res.json();
+            const container = document.getElementById('message-container');
+            if (data.length === 0) { container.innerHTML = '<p class="text-slate-400 italic text-sm text-center">No messages.</p>'; return; }
+            
+            container.innerHTML = data.map(m => `
+                <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-200 transition">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-indigo-600">${m.name}</h3>
+                        <span class="text-[10px] text-slate-400 font-bold uppercase border px-2 py-1 rounded-md bg-white">${new Date(m.created_at || Date.now()).toLocaleDateString()}</span>
                     </div>
-                `).join('');
-            } catch (err) { console.error(err); }
+                    <p class="text-slate-600 text-sm mb-4 leading-relaxed">${m.message}</p>
+                    <div class="flex gap-2 border-t pt-4">
+                        <a href="mailto:?subject=Reply to ${m.name}&body=Hello ${m.name},%0D%0A%0D%0AIn response to your message: ${m.message}" 
+                           class="text-[11px] bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-bold hover:bg-indigo-600 hover:text-white transition">
+                           Reply Email
+                        </a>
+                        <button onclick="deleteMessage(${m.id})" class="text-[11px] text-red-400 font-bold ml-auto hover:text-red-600 transition">Delete</button>
+                    </div>
+                </div>
+            `).join('');
         }
 
         async function deleteMessage(id) {
-            if (confirm("តើលោកគ្រូចង់លុបសារនេះមែនទេ?")) {
-                await fetch(`/api/messages/${id}`, { method: 'DELETE' });
-                fetchMessages();
-            }
+            if (confirm("លុបសារ?")) { await fetch(`/api/messages/${id}`, { method: 'DELETE' }); fetchMessages(); }
         }
 
-        // --- ៣. PROJECTS LOGIC ---
+        // ៣. PROJECTS LOGIC
         async function fetchManageProjects() {
-            try {
-                const res = await fetch('/api/projects');
-                const data = await res.json();
-                const list = document.getElementById('manage-project-list');
-                
-                list.innerHTML = data.map(p => `
-                    <tr class="border-b last:border-0 hover:bg-slate-50 transition">
-                        <td class="py-4 pr-4 font-bold text-slate-700 text-sm truncate max-w-[150px]">${p.title}</td>
-                        <td class="py-4 text-right flex gap-2 justify-end">
-                            <button onclick='setupEdit(${JSON.stringify(p)})' class="text-[11px] bg-slate-100 text-slate-600 px-3 py-2 rounded-lg font-bold hover:bg-indigo-600 hover:text-white transition">Edit</button>
-                            <button onclick="deleteProject(${p.id})" class="text-[11px] bg-red-50 text-red-500 px-3 py-2 rounded-lg font-bold hover:bg-red-500 hover:text-white transition">Delete</button>
-                        </td>
-                    </tr>
-                `).join('');
-            } catch (err) { console.error(err); }
+            const res = await fetch('/api/projects');
+            const data = await res.json();
+            const list = document.getElementById('manage-project-list');
+            list.innerHTML = data.map(p => `
+                <tr class="border-b last:border-0 hover:bg-slate-50">
+                    <td class="py-4 pr-4 font-bold text-slate-700 text-sm truncate max-w-[150px]">${p.title}</td>
+                    <td class="py-4 text-right flex gap-2 justify-end">
+                        <button onclick='setupEdit(${JSON.stringify(p)})' class="text-[11px] bg-slate-100 text-slate-600 px-3 py-2 rounded-lg font-bold hover:bg-indigo-600 hover:text-white transition">Edit</button>
+                        <button onclick="deleteProject(${p.id})" class="text-[11px] bg-red-50 text-red-500 px-3 py-2 rounded-lg font-bold hover:bg-red-500 hover:text-white transition">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
         }
 
         function setupEdit(p) {
@@ -198,10 +179,7 @@
         }
 
         async function deleteProject(id) {
-            if (confirm("លុបគម្រោងនេះ?")) {
-                await fetch(`/api/projects/${id}`, { method: 'DELETE' });
-                fetchManageProjects();
-            }
+            if (confirm("លុបគម្រោង?")) { await fetch(`/api/projects/${id}`, { method: 'DELETE' }); fetchManageProjects(); }
         }
 
         document.getElementById('uploadForm').onsubmit = async (e) => {
@@ -214,21 +192,13 @@
                 image_url: document.getElementById('img').value,
                 link: document.getElementById('link').value
             };
-            
             const method = id ? 'PUT' : 'POST';
             const url = id ? `/api/projects/${id}` : '/api/projects';
-            
             const res = await fetch(url, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
+                method: method, headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(projectData)
             });
-            
-            if (res.ok) {
-                resetForm();
-                fetchManageProjects();
-                alert("ប្រតិបត្តិការជោគជ័យ!");
-            }
+            if (res.ok) { resetForm(); fetchManageProjects(); alert("ជោគជ័យ!"); }
         };
     </script>
 </body>
