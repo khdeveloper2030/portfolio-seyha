@@ -1,139 +1,277 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Cross-Origin-Opener-Policy"
+      content="same-origin-allow-popups"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <title>Admin Dashboard | Seyha Em</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
-</head>
-<body class="bg-slate-50 min-h-screen pb-10">
-
-    <div id="login-overlay" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4">
-        <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center">
-            <div class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold">S</div>
-            <h2 class="text-xl font-bold mb-2">Admin Login</h2>
-            <div id="g_id_onload" data-client_id="479851271829-ou0q6pa3kl4nvjn7d4sikg6ef2v01bhj.apps.googleusercontent.com" data-callback="handleCredentialResponse" data-ux_mode="popup" data-auto_prompt="false"></div>
-            <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill" data-theme="outline" data-size="large"></div>
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 min-h-screen pb-10">
+    <div
+      id="login-overlay"
+      class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center"
+      >
+        <div
+          class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold"
+        >
+          S
         </div>
+        <h2 class="text-2xl font-bold mb-8">Admin Login</h2>
+        <div
+          id="g_id_onload"
+          data-client_id="479851271829-ou0q6pa3kl4nvjn7d4sikg6ef2v01bhj.apps.googleusercontent.com"
+          data-callback="handleCredentialResponse"
+          data-ux_mode="popup"
+          data-auto_prompt="false"
+        ></div>
+        <div
+          class="g_id_signin flex justify-center"
+          data-type="standard"
+          data-shape="pill"
+          data-theme="outline"
+          data-size="large"
+        ></div>
+        <a
+          href="index.html"
+          class="block mt-8 text-slate-400 text-sm hover:underline"
+          >← ត្រឡប់ទៅកាន់វេបសាយ</a
+        >
+      </div>
     </div>
 
     <div id="admin-content" class="hidden p-4 md:p-8 max-w-5xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 bg-white p-6 rounded-[2rem] border shadow-sm">
-            <h1 class="text-2xl font-extrabold italic text-slate-900">Seyha<span class="text-indigo-600">.Admin</span></h1>
-            <div class="flex gap-2 w-full md:w-auto">
-                <button onclick="logout()" class="flex-1 md:flex-none px-4 py-2 border border-red-100 text-red-500 rounded-xl text-xs font-bold">Logout</button>
-                <a href="index.html" class="flex-1 md:flex-none px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold text-center">View Site</a>
-            </div>
+      <div
+        class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 bg-white p-6 rounded-[2rem] border shadow-sm"
+      >
+        <h1 class="text-2xl font-extrabold italic">
+          Seyha<span class="text-indigo-600">.Admin</span>
+        </h1>
+        <div class="flex gap-2 w-full md:w-auto">
+          <button
+            onclick="logout()"
+            class="flex-1 md:flex-none px-4 py-2 border border-red-100 text-red-500 rounded-xl text-xs font-bold transition hover:bg-red-50"
+          >
+            Logout
+          </button>
+          <a
+            href="index.html"
+            class="flex-1 md:flex-none px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold text-center"
+            >View Site</a
+          >
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-5">
+          <div
+            class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border lg:sticky lg:top-8"
+          >
+            <h2 id="form-title" class="text-lg font-bold mb-6 text-indigo-600">
+              🚀 Project Editor
+            </h2>
+            <form id="uploadForm" class="space-y-4">
+              <input type="hidden" id="edit-id" />
+              <input
+                type="text"
+                id="title"
+                placeholder="Project Name"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm"
+                required
+              />
+              <input
+                type="text"
+                id="tags"
+                placeholder="Tags (Flutter, PHP...)"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm"
+              />
+              <textarea
+                id="desc"
+                placeholder="Description..."
+                rows="3"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm"
+                required
+              ></textarea>
+              <input
+                type="url"
+                id="img"
+                placeholder="Image URL"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm"
+              />
+              <input
+                type="url"
+                id="link"
+                placeholder="Project Link (Live/GitHub)"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm"
+              />
+              <button
+                type="submit"
+                id="submit-btn"
+                class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition text-sm"
+              >
+                SAVE PROJECT
+              </button>
+              <button
+                type="button"
+                id="cancel-btn"
+                onclick="resetForm()"
+                class="hidden w-full bg-slate-100 text-slate-500 py-2 rounded-xl mt-2 font-bold text-xs transition"
+              >
+                CANCEL
+              </button>
+            </form>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div class="lg:col-span-5">
-                <div class="bg-white p-6 rounded-[2rem] shadow-sm border lg:sticky lg:top-8">
-                    <h2 id="form-title" class="text-lg font-bold mb-6 text-indigo-600 flex items-center gap-2"><span>🚀</span> Project Editor</h2>
-                    <form id="uploadForm" class="space-y-4">
-                        <input type="hidden" id="edit-id">
-                        <input type="text" id="title" placeholder="Name" class="w-full p-4 bg-slate-50 border rounded-xl text-sm" required>
-                        <textarea id="desc" placeholder="Description..." rows="3" class="w-full p-4 bg-slate-50 border rounded-xl text-sm" required></textarea>
-                        <input type="url" id="img" placeholder="Image URL" class="w-full p-4 bg-slate-50 border rounded-xl text-sm">
-                        <button type="submit" id="submit-btn" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition text-sm">Save Project</button>
-                        <button type="button" id="cancel-btn" onclick="resetForm()" class="hidden w-full bg-slate-100 text-slate-500 py-2 rounded-xl mt-2 font-bold text-xs">Cancel</button>
-                    </form>
-                </div>
+        <div class="lg:col-span-7 space-y-8">
+          <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border">
+            <h2 class="text-lg font-bold mb-6 text-emerald-600">📩 Inbox</h2>
+            <div id="message-container" class="space-y-4"></div>
+          </div>
+          <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border">
+            <h2 class="text-lg font-bold mb-6 text-amber-600">📂 Projects</h2>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left min-w-[400px]">
+                <tbody id="manage-project-list"></tbody>
+              </table>
             </div>
-
-            <div class="lg:col-span-7 space-y-8">
-                <div class="bg-white p-6 rounded-[2rem] shadow-sm border">
-                    <h2 class="text-lg font-bold mb-6 text-emerald-600"><span>📩</span> Inbox</h2>
-                    <div id="message-container" class="space-y-4"></div>
-                </div>
-                <div class="bg-white p-6 rounded-[2rem] shadow-sm border">
-                    <h2 class="text-lg font-bold mb-6 text-amber-600"><span>📂</span> Projects</h2>
-                    <div class="overflow-x-auto"><table class="w-full text-left min-w-[400px]"><tbody id="manage-project-list"></tbody></table></div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <script>
-        function handleCredentialResponse(response) {
-            const payload = JSON.parse(atob(response.credential.split('.')[1]));
-            if (payload.email === "seyhaemdev@gmail.com") {
-                sessionStorage.setItem('isLoggedIn', 'true');
-                showAdmin();
-            } else { alert("Gmail Incorrect!"); }
+      function handleCredentialResponse(response) {
+        const payload = JSON.parse(atob(response.credential.split(".")[1]));
+        if (payload.email === "seyhaemdev@gmail.com") {
+          sessionStorage.setItem("isLoggedIn", "true");
+          showAdmin();
+        } else {
+          alert("Gmail Incorrect!");
         }
+      }
+      function showAdmin() {
+        document.getElementById("login-overlay").classList.add("hidden");
+        document.getElementById("admin-content").classList.remove("hidden");
+        fetchManageProjects();
+        fetchMessages();
+      }
+      function logout() {
+        sessionStorage.clear();
+        location.reload();
+      }
+      if (sessionStorage.getItem("isLoggedIn") === "true") showAdmin();
 
-        function showAdmin() {
-            document.getElementById('login-overlay').classList.add('hidden');
-            document.getElementById('admin-content').classList.remove('hidden');
-            fetchManageProjects();
-            fetchMessages();
-        }
-
-        function logout() { sessionStorage.clear(); location.reload(); }
-        if (sessionStorage.getItem('isLoggedIn') === 'true') showAdmin();
-
-        async function fetchMessages() {
-            const res = await fetch('/api/messages');
-            const data = await res.json();
-            document.getElementById('message-container').innerHTML = data.map(m => `
+      async function fetchMessages() {
+        const res = await fetch("/api/messages");
+        const data = await res.json();
+        document.getElementById("message-container").innerHTML = data
+          .map(
+            (m) => `
                 <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
                     <div class="flex justify-between items-start mb-2">
-                        <h3 class="font-bold text-indigo-600 text-sm">${m.name}</h3>
-                        <span class="text-[10px] text-slate-400 uppercase font-bold border px-2 py-1 rounded bg-white">${new Date(m.created_at).toLocaleDateString()}</span>
+                        <div>
+                            <h3 class="font-bold text-indigo-600 text-sm">${m.name}</h3>
+                            <p class="text-[10px] text-slate-400 font-bold">${m.email || "Visitor"}</p>
+                        </div>
+                        <button onclick="deleteMessage(${m.id})" class="text-red-400 text-xs font-bold">Delete</button>
                     </div>
                     <p class="text-slate-600 text-xs mb-4 leading-relaxed">${m.message}</p>
-                    <div class="flex gap-2 border-t pt-4">
-                        <a href="mailto:${m.email}?subject=Reply to ${m.name}&body=Hello ${m.name},%0D%0A%0D%0ARegarding your message: ${m.message}" 
-                           class="text-[11px] bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-bold hover:bg-indigo-600 hover:text-white transition">
-                           Reply to ${m.email || 'Visitor'}
-                        </a>
-                        <button onclick="deleteMessage(${m.id})" class="text-[11px] text-red-400 font-bold ml-auto">Delete</button>
-                    </div>
+                    <a href="mailto:${m.email}?subject=Reply to ${m.name}&body=Hello ${m.name},%0D%0A%0D%0ARegarding your inquiry: ${m.message}" 
+                       class="inline-block text-[11px] bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-bold hover:bg-indigo-600 hover:text-white transition">
+                       Reply via Email
+                    </a>
                 </div>
-            `).join('');
+            `,
+          )
+          .join("");
+      }
+      async function deleteMessage(id) {
+        if (confirm("Delete?")) {
+          await fetch(`/api/messages/${id}`, { method: "DELETE" });
+          fetchMessages();
         }
+      }
 
-        async function deleteMessage(id) { if (confirm("Delete?")) { await fetch(`/api/messages/${id}`, { method: 'DELETE' }); fetchMessages(); } }
+      async function fetchManageProjects() {
+        const res = await fetch("/api/projects");
+        const data = await res.json();
+        document.getElementById("manage-project-list").innerHTML = data
+          .map(
+            (p) => `
+                <tr class="border-b last:border-0">
+                    <td class="py-4 font-bold text-slate-700 text-sm">${p.title}</td>
+                    <td class="py-4 text-right flex gap-2 justify-end">
+                        <button onclick='setupEdit(${JSON.stringify(p)})' class="text-[10px] bg-slate-100 px-3 py-2 rounded-lg font-bold">Edit</button>
+                        <button onclick="deleteProject(${p.id})" class="text-[10px] bg-red-50 text-red-500 px-3 py-2 rounded-lg font-bold">Delete</button>
+                    </td>
+                </tr>
+            `,
+          )
+          .join("");
+      }
 
-        async function fetchManageProjects() {
-            const res = await fetch('/api/projects');
-            const data = await res.json();
-            document.getElementById('manage-project-list').innerHTML = data.map(p => `
-                <tr class="border-b last:border-0"><td class="py-4 font-bold text-slate-700 text-sm">${p.title}</td>
-                <td class="py-4 text-right flex gap-2 justify-end">
-                    <button onclick='setupEdit(${JSON.stringify(p)})' class="text-[10px] bg-slate-100 px-3 py-2 rounded-lg font-bold">Edit</button>
-                    <button onclick="deleteProject(${p.id})" class="text-[10px] bg-red-50 text-red-500 px-3 py-2 rounded-lg font-bold">Delete</button>
-                </td></tr>
-            `).join('');
+      function setupEdit(p) {
+        document.getElementById("edit-id").value = p.id;
+        document.getElementById("title").value = p.title;
+        document.getElementById("desc").value = p.description;
+        document.getElementById("tags").value = p.tags;
+        document.getElementById("img").value = p.image_url;
+        document.getElementById("link").value = p.link;
+        document.getElementById("form-title").innerText = "📝 Edit Mode";
+        document.getElementById("cancel-btn").classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function resetForm() {
+        document.getElementById("uploadForm").reset();
+        document.getElementById("edit-id").value = "";
+        document.getElementById("form-title").innerText = "🚀 Project Editor";
+        document.getElementById("cancel-btn").classList.add("hidden");
+      }
+
+      async function deleteProject(id) {
+        if (confirm("Delete?")) {
+          await fetch(`/api/projects/${id}`, { method: "DELETE" });
+          fetchManageProjects();
         }
+      }
 
-        function setupEdit(p) {
-            document.getElementById('edit-id').value = p.id;
-            document.getElementById('title').value = p.title;
-            document.getElementById('desc').value = p.description;
-            document.getElementById('img').value = p.image_url;
-            document.getElementById('form-title').innerText = "📝 Edit Mode";
-            document.getElementById('submit-btn').innerText = "Update Project";
-            document.getElementById('cancel-btn').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function resetForm() { document.getElementById('uploadForm').reset(); document.getElementById('edit-id').value = ''; document.getElementById('submit-btn').innerText = "Save Project"; document.getElementById('cancel-btn').classList.add('hidden'); }
-
-        async function deleteProject(id) { if (confirm("Delete?")) { await fetch(`/api/projects/${id}`, { method: 'DELETE' }); fetchManageProjects(); } }
-
-        document.getElementById('uploadForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('edit-id').value;
-            const projectData = { title: document.getElementById('title').value, description: document.getElementById('desc').value, image_url: document.getElementById('img').value };
-            await fetch(id ? `/api/projects/${id}` : '/api/projects', { method: id ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(projectData) });
-            resetForm(); fetchManageProjects(); alert("Success!");
+      document.getElementById("uploadForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const id = document.getElementById("edit-id").value;
+        const projectData = {
+          title: document.getElementById("title").value,
+          description: document.getElementById("desc").value,
+          tags: document.getElementById("tags").value,
+          image_url: document.getElementById("img").value,
+          link: document.getElementById("link").value,
         };
+        await fetch(id ? `/api/projects/${id}` : "/api/projects", {
+          method: id ? "PUT" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(projectData),
+        });
+        resetForm();
+        fetchManageProjects();
+        alert("Success!");
+      };
     </script>
-</body>
+  </body>
 </html>

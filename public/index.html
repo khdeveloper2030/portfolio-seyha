@@ -18,14 +18,16 @@
         <div class="max-w-6xl mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg">S</div>
-                <span class="text-xl font-extrabold tracking-tighter uppercase">Seyha<span class="text-indigo-600">.Dev</span></span>
+                <span class="text-xl font-extrabold tracking-tighter">SEYHA<span class="text-indigo-600">.DEV</span></span>
             </div>
             <div class="hidden md:flex gap-8 font-semibold text-slate-600 items-center text-sm">
                 <a href="#projects" class="hover:text-indigo-600 transition">Projects</a>
                 <a href="#contact" class="hover:text-indigo-600 transition">Contact</a>
                 <a href="admin.html" class="bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-700 transition shadow-md">Login</a>
             </div>
-            <button id="menu-toggle" class="md:hidden text-slate-900"><svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button>
+            <button id="menu-toggle" class="md:hidden text-slate-900 focus:outline-none">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
         </div>
     </nav>
 
@@ -36,46 +38,50 @@
         <a href="admin.html" class="bg-indigo-600 text-white px-8 py-3 rounded-full">Login</a>
     </div>
 
-    <header class="max-w-6xl mx-auto px-4 py-20 text-center">
-        <h1 class="text-4xl md:text-7xl font-extrabold mb-6 tracking-tight leading-tight">Full-Stack <span class="text-indigo-600">Developer</span></h1>
-        <p class="text-slate-500 italic max-w-2xl mx-auto text-sm md:text-lg px-4">"ជំរាបសួរ! ខ្ញុំបាទ សីហា ជាគ្រូបង្រៀនផ្នែក ICT និងជាអ្នកបង្កើតកម្មវិធី Web/Mobile។"</p>
+    <header class="max-w-6xl mx-auto px-4 py-16 md:py-24 text-center">
+        <div class="inline-block px-4 py-1.5 mb-6 text-xs font-bold tracking-widest text-indigo-600 uppercase bg-indigo-50 rounded-full">Available for Projects</div>
+        <h1 class="text-4xl md:text-7xl font-extrabold mb-6 tracking-tight">Full-Stack <span class="text-indigo-600">Developer</span></h1>
+        <p class="text-base md:text-lg text-slate-500 max-w-2xl mx-auto italic px-4">"ជំរាបសួរ! ខ្ញុំបាទ សីហា ជាគ្រូបង្រៀនផ្នែក ICT និងជាអ្នកបង្កើតកម្មវិធី Web/Mobile។"</p>
     </header>
 
     <section id="projects" class="max-w-6xl mx-auto px-4 md:px-6 py-10">
         <h2 class="text-2xl md:text-3xl font-bold mb-10 border-l-4 border-indigo-600 pl-4">Featured Projects</h2>
-        <div id="project-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
+        <div id="project-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            </div>
     </section>
 
-    <section id="contact" class="max-w-6xl mx-auto px-4 md:px-6 py-20">
-        <div class="bg-indigo-900 rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 text-white flex flex-col lg:flex-row gap-12 shadow-2xl relative overflow-hidden border border-indigo-800">
+    <section id="contact" class="max-w-6xl mx-auto px-4 md:px-6 py-16 md:py-24">
+        <div class="bg-indigo-900 rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-12 text-white flex flex-col lg:flex-row gap-12 shadow-2xl relative overflow-hidden">
             <div class="lg:w-1/2 z-10">
                 <h2 class="text-3xl md:text-4xl font-bold mb-6">Let's Connect</h2>
-                <p class="text-indigo-200 mb-10 leading-relaxed">ផ្ញើសារមកកាន់ខ្ញុំ ដើម្បីពិភាក្សាការងារផ្សេងៗ៖</p>
                 <div class="space-y-4">
                     <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10">
                         <span class="text-2xl">📧</span>
                         <div class="overflow-hidden"><p class="text-[10px] text-indigo-300 uppercase font-bold">Email</p><p class="font-bold text-sm truncate">seyhaemdev@gmail.com</p></div>
                     </div>
+                    <a href="https://t.me/seyha_em" target="_blank" class="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/20 hover:bg-white/20 transition">
+                        <span class="text-2xl">✈️</span>
+                        <div><p class="text-[10px] text-indigo-300 uppercase font-bold">Telegram</p><p class="font-bold text-sm">Chat with me</p></div>
+                    </a>
                 </div>
             </div>
             
-            <div class="lg:w-1/2 bg-white/10 p-6 md:p-8 rounded-3xl backdrop-blur-md border border-white/20 z-10 shadow-inner">
+            <div class="lg:w-1/2 bg-white/10 p-6 md:p-8 rounded-3xl backdrop-blur-md border border-white/20 z-10">
                 <form id="contactForm" class="space-y-4">
                     <input type="text" id="s_name" placeholder="Full Name" class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white text-sm" required>
                     <input type="email" id="s_email" placeholder="Your Email Address" class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white text-sm" required>
-                    <textarea id="s_message" placeholder="Your Message" rows="4" class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white text-sm" required></textarea>
+                    <textarea id="s_message" placeholder="Message" rows="4" class="w-full p-4 bg-white/10 rounded-xl outline-none border border-white/20 focus:border-white text-sm" required></textarea>
                     <button type="submit" id="sendBtn" class="w-full bg-white text-indigo-900 font-bold py-4 rounded-xl shadow-lg active:scale-95 transition text-sm">Send Message</button>
                 </form>
             </div>
         </div>
     </section>
 
-    <footer class="text-center py-10 text-slate-400 border-t bg-white px-4 text-xs md:text-sm">
-        <p>© 2026 Seyha Em - Crafted with ❤️ using Node.js & Neon Postgres</p>
+    <footer class="text-center py-10 text-slate-400 border-t bg-white px-4 text-xs">
+        <p>© 2026 Seyha Em - Node.js & Neon Postgres</p>
     </footer>
 
     <script>
-        // Menu Toggle
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
         menuToggle.onclick = () => mobileMenu.classList.toggle('closed');
@@ -86,13 +92,13 @@
             const res = await fetch('/api/projects');
             const data = await res.json();
             document.getElementById('project-list').innerHTML = data.map(p => `
-                <div class="bg-white border border-slate-100 rounded-3xl overflow-hidden hover:shadow-2xl transition duration-500 flex flex-col h-full group">
+                <div class="bg-white border border-slate-100 rounded-3xl overflow-hidden hover:shadow-xl transition duration-500 flex flex-col h-full group">
                     <img src="${p.image_url || 'https://via.placeholder.com/600x400'}" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500">
                     <div class="p-6 flex flex-col flex-grow">
-                        <span class="text-indigo-600 font-bold text-[10px] uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full w-fit mb-4">${p.tags || 'Dev'}</span>
+                        <span class="text-indigo-600 font-bold text-[10px] uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full w-fit mb-4">${p.tags || 'Project'}</span>
                         <h3 class="text-lg font-bold text-slate-900 line-clamp-1">${p.title}</h3>
                         <p class="text-slate-500 text-sm mt-3 flex-grow line-clamp-3">${p.description}</p>
-                        <a href="${p.link}" target="_blank" class="mt-6 font-bold text-indigo-600 text-sm">Explore →</a>
+                        <a href="${p.link}" target="_blank" class="mt-6 font-bold text-indigo-600 text-sm">Explore Project →</a>
                     </div>
                 </div>
             `).join('');
@@ -103,13 +109,11 @@
             const btn = document.getElementById('sendBtn');
             btn.innerText = "Sending...";
             btn.disabled = true;
-
             const data = {
                 name: document.getElementById('s_name').value,
                 email: document.getElementById('s_email').value,
                 message: document.getElementById('s_message').value
             };
-
             await fetch('/api/contact', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
