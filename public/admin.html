@@ -12,35 +12,45 @@
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <title>Admin Dashboard | Seyha Em</title>
+    <title>Admin Panel | Seyha Em</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
       body {
         font-family: "Plus Jakarta Sans", sans-serif;
       }
-      .custom-scrollbar::-webkit-scrollbar {
-        height: 4px;
+      .tab-content {
+        display: none;
       }
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #e2e8f0;
-        border-radius: 10px;
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     </style>
   </head>
-  <body class="bg-slate-50 min-h-screen pb-10">
+  <body class="bg-slate-50 min-h-screen">
     <div
       id="login-overlay"
       class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4"
     >
       <div
-        class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center border border-slate-100"
+        class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center"
       >
         <div
-          class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-indigo-200"
+          class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold"
         >
           S
         </div>
-        <h2 class="text-2xl font-bold mb-2 text-slate-900 italic">
+        <h2 class="text-2xl font-bold mb-8 italic text-slate-900">
           Admin Login
         </h2>
         <div
@@ -60,139 +70,117 @@
         <a
           href="index.html"
           class="block mt-8 text-slate-400 text-sm hover:underline"
-          >← ត្រឡប់ទៅកាន់វេបសាយ</a
+          >← Back to Site</a
         >
       </div>
     </div>
 
-    <div id="admin-content" class="hidden p-4 md:p-8 max-w-6xl mx-auto">
-      <div
-        class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8 bg-white p-6 rounded-[2rem] border shadow-sm"
-      >
-        <div class="flex items-center gap-4">
-          <img
-            id="header-logo"
-            src=""
-            class="w-12 h-12 rounded-full border-2 border-indigo-600 p-0.5 object-cover"
-            onerror="this.src = 'https://via.placeholder.com/150'"
-          />
-          <h1 class="text-xl font-extrabold italic text-slate-900">
-            Seyha<span class="text-indigo-600">.Admin</span>
-          </h1>
-        </div>
-        <div class="flex gap-2">
+    <div id="admin-content" class="hidden">
+      <nav class="bg-white border-b sticky top-0 z-40">
+        <div
+          class="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-3">
+            <img
+              id="header-logo"
+              src=""
+              class="w-10 h-10 rounded-full border-2 border-indigo-600 p-0.5 object-cover"
+              onerror="this.src = 'https://via.placeholder.com/150'"
+            />
+            <span class="font-extrabold italic hidden md:block text-slate-900"
+              >Seyha<span class="text-indigo-600">.Admin</span></span
+            >
+          </div>
+
+          <div class="flex-grow max-w-xs mx-4">
+            <select
+              id="menu-selector"
+              onchange="switchTab(this.value)"
+              class="w-full p-3 bg-slate-100 border-none rounded-xl text-sm font-bold text-slate-700 outline-none ring-2 ring-transparent focus:ring-indigo-500 transition"
+            >
+              <option value="profile">👤 Profile & Content</option>
+              <option value="editor">🚀 Project Editor</option>
+              <option value="inbox">📩 Inbox Messages</option>
+              <option value="projects">📂 Existing Projects</option>
+            </select>
+          </div>
+
           <button
             onclick="logout()"
-            class="px-6 py-2 border border-red-100 text-red-500 rounded-xl text-xs font-bold transition hover:bg-red-50"
+            class="px-4 py-2 text-red-500 font-bold text-xs hover:bg-red-50 rounded-lg transition"
           >
             Logout
           </button>
-          <a
-            href="index.html"
-            class="px-6 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold text-center shadow-lg hover:bg-slate-800 transition"
-            >View Site</a
-          >
         </div>
-      </div>
+      </nav>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div class="lg:col-span-12">
+      <main class="max-w-4xl mx-auto p-4 md:p-8">
+        <section id="tab-profile" class="tab-content active">
           <div
-            class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-indigo-50 space-y-8"
+            class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border space-y-6"
           >
-            <h2
-              class="text-lg font-bold text-indigo-600 flex items-center gap-2"
-            >
-              <span>👤</span> Profile & Content Settings
+            <h2 class="text-xl font-bold text-indigo-600 italic">
+              Profile Settings
             </h2>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div class="text-center space-y-4">
-                <img
-                  id="preview-logo"
-                  src=""
-                  class="w-32 h-32 rounded-full mx-auto border-4 border-slate-50 shadow-md object-cover"
-                  onerror="this.src = 'https://via.placeholder.com/150'"
-                />
-                <input
-                  type="url"
-                  id="logo-input"
-                  placeholder="Logo Image URL"
-                  class="w-full p-3 bg-slate-50 border rounded-xl text-xs outline-none focus:border-indigo-500 transition"
-                />
-              </div>
-
-              <div class="lg:col-span-2 space-y-4">
-                <div>
-                  <label
-                    class="text-[10px] font-bold text-slate-400 uppercase ml-1"
-                    >Job Title</label
-                  >
-                  <input
-                    type="text"
-                    id="title-input"
-                    placeholder="e.g. Full-Stack Developer"
-                    class="w-full p-3 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="text-[10px] font-bold text-slate-400 uppercase ml-1"
-                    >Greeting Bio (សារស្វាគមន៍)</label
-                  >
-                  <textarea
-                    id="bio-input"
-                    rows="3"
-                    class="w-full p-3 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500"
-                  ></textarea>
-                </div>
-              </div>
+            <div
+              class="flex flex-col md:flex-row items-center gap-6 pb-6 border-b"
+            >
+              <img
+                id="preview-logo"
+                src=""
+                class="w-24 h-24 rounded-full border-4 border-slate-50 shadow-md object-cover"
+              />
+              <input
+                type="url"
+                id="logo-input"
+                placeholder="Logo URL"
+                class="flex-grow p-4 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500"
+              />
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t">
-              <div class="space-y-2">
-                <label
-                  class="text-[10px] font-bold text-slate-400 uppercase ml-1"
-                  >Gmail Address</label
-                >
-                <input
-                  type="email"
-                  id="gmail-input"
-                  class="w-full p-3 bg-slate-50 border rounded-xl text-sm outline-none"
-                />
-              </div>
-              <div class="space-y-2">
-                <label
-                  class="text-[10px] font-bold text-slate-400 uppercase ml-1"
-                  >Telegram Link</label
-                >
-                <input
-                  type="text"
-                  id="tele-input"
-                  placeholder="https://t.me/yourusername"
-                  class="w-full p-3 bg-slate-50 border rounded-xl text-sm outline-none"
-                />
-              </div>
+            <div class="space-y-4">
+              <input
+                type="text"
+                id="title-input"
+                placeholder="Job Title"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
+              />
+              <textarea
+                id="bio-input"
+                rows="4"
+                placeholder="Greeting Bio"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
+              ></textarea>
             </div>
-
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="email"
+                id="gmail-input"
+                placeholder="Gmail"
+                class="p-4 bg-slate-50 border rounded-xl text-sm outline-none"
+              />
+              <input
+                type="text"
+                id="tele-input"
+                placeholder="Telegram Link"
+                class="p-4 bg-slate-50 border rounded-xl text-sm outline-none"
+              />
+            </div>
             <button
               onclick="saveProfile()"
-              class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold text-sm shadow-xl active:scale-95 transition tracking-widest uppercase"
+              class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-indigo-200 active:scale-95 transition"
             >
-              Save All Changes
+              SAVE ALL CHANGES
             </button>
           </div>
-        </div>
+        </section>
 
-        <div class="lg:col-span-5">
-          <div
-            class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border lg:sticky lg:top-8"
-          >
+        <section id="tab-editor" class="tab-content">
+          <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
             <h2
               id="form-title"
-              class="text-lg font-bold mb-6 text-amber-500 flex items-center gap-2"
+              class="text-xl font-bold text-amber-500 mb-6 italic"
             >
-              <span>🚀</span> Project Editor
+              Project Editor
             </h2>
             <form id="uploadForm" class="space-y-4">
               <input type="hidden" id="edit-id" />
@@ -200,7 +188,7 @@
                 type="text"
                 id="p-title"
                 placeholder="Project Name"
-                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none focus:border-amber-500 transition"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
                 required
               />
               <input
@@ -211,8 +199,8 @@
               />
               <textarea
                 id="p-desc"
-                placeholder="Description..."
-                rows="3"
+                placeholder="Description"
+                rows="4"
                 class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
                 required
               ></textarea>
@@ -231,52 +219,70 @@
               <button
                 type="submit"
                 id="submit-btn"
-                class="w-full bg-amber-500 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition text-sm uppercase"
+                class="w-full bg-amber-500 text-white py-4 rounded-2xl font-bold shadow-lg shadow-amber-200 active:scale-95 transition"
               >
-                Save Project
+                SAVE PROJECT
               </button>
               <button
                 type="button"
                 id="cancel-btn"
                 onclick="resetForm()"
-                class="hidden w-full bg-slate-100 text-slate-500 py-2 rounded-xl mt-2 font-bold text-xs"
+                class="hidden w-full mt-2 text-slate-400 font-bold"
               >
-                Cancel Edit
+                Cancel
               </button>
             </form>
           </div>
-        </div>
+        </section>
 
-        <div class="lg:col-span-7 space-y-8">
+        <section id="tab-inbox" class="tab-content">
           <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
-            <h2 class="text-lg font-bold mb-6 text-emerald-600 italic">
-              <span>📩</span> Inbox Messages
+            <h2 class="text-xl font-bold text-emerald-600 mb-6 italic">
+              Inbox Messages
             </h2>
-            <div id="message-container" class="space-y-4"></div>
+            <div
+              id="message-container"
+              class="space-y-4 text-center text-slate-400 italic"
+            >
+              Loading messages...
+            </div>
           </div>
+        </section>
+
+        <section id="tab-projects" class="tab-content">
           <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
-            <h2 class="text-lg font-bold mb-6 text-slate-600 italic">
-              <span>📂</span> Existing Projects
+            <h2 class="text-xl font-bold text-slate-800 mb-6 italic">
+              Manage Projects
             </h2>
-            <div class="overflow-x-auto custom-scrollbar">
+            <div class="overflow-x-auto">
               <table class="w-full text-left min-w-[400px]">
                 <tbody id="manage-project-list"></tbody>
               </table>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
 
     <script>
+      // Tab Switching Logic
+      function switchTab(tabId) {
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((tab) => tab.classList.remove("active"));
+        document.getElementById("tab-" + tabId).classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
       // AUTH
       function handleCredentialResponse(response) {
         const payload = JSON.parse(atob(response.credential.split(".")[1]));
         if (payload.email === "seyhaemdev@gmail.com") {
           sessionStorage.setItem("isLoggedIn", "true");
+          sessionStorage.setItem("userName", payload.name);
           showAdmin();
         } else {
-          alert("Gmail Unauthorized!");
+          alert("Unauthorized!");
         }
       }
       function showAdmin() {
@@ -292,23 +298,19 @@
       }
       if (sessionStorage.getItem("isLoggedIn") === "true") showAdmin();
 
-      // PROFILE & CONTENT LOGIC
+      // PROFILE & CONTENT
       async function fetchProfile() {
-        try {
-          const res = await fetch("/api/profile");
-          const data = await res.json();
-          if (data.logo_url) {
-            document.getElementById("header-logo").src = data.logo_url;
-            document.getElementById("preview-logo").src = data.logo_url;
-            document.getElementById("logo-input").value = data.logo_url;
-          }
-          document.getElementById("title-input").value = data.title || "";
-          document.getElementById("bio-input").value = data.bio || "";
-          document.getElementById("gmail-input").value = data.gmail || "";
-          document.getElementById("tele-input").value = data.telegram || "";
-        } catch (err) {
-          console.error(err);
+        const res = await fetch("/api/profile");
+        const data = await res.json();
+        if (data.logo_url) {
+          document.getElementById("header-logo").src = data.logo_url;
+          document.getElementById("preview-logo").src = data.logo_url;
+          document.getElementById("logo-input").value = data.logo_url;
         }
+        document.getElementById("title-input").value = data.title || "";
+        document.getElementById("bio-input").value = data.bio || "";
+        document.getElementById("gmail-input").value = data.gmail || "";
+        document.getElementById("tele-input").value = data.telegram || "";
       }
 
       async function saveProfile() {
@@ -319,33 +321,34 @@
           gmail: document.getElementById("gmail-input").value,
           telegram: document.getElementById("tele-input").value,
         };
-        try {
-          await fetch("/api/profile", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          alert("រក្សាទុកជោគជ័យ! ✅");
-          fetchProfile();
-        } catch (err) {
-          alert("Error updating profile!");
-        }
+        await fetch("/api/profile", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        alert("Updated Successfully! ✅");
+        fetchProfile();
       }
 
-      // MESSAGES & PROJECTS
+      // MESSAGES
       async function fetchMessages() {
         const res = await fetch("/api/messages");
         const data = await res.json();
-        document.getElementById("message-container").innerHTML = data
+        const container = document.getElementById("message-container");
+        if (data.length === 0) {
+          container.innerHTML = "No messages.";
+          return;
+        }
+        container.innerHTML = data
           .map(
             (m) => `
-                <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100 transition hover:border-indigo-200">
+                <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
                     <div class="flex justify-between items-start mb-2">
-                        <div><h3 class="font-bold text-indigo-600 text-sm">${m.name}</h3><p class="text-[10px] text-slate-400 font-bold uppercase">${m.email || "Visitor"}</p></div>
+                        <div><h3 class="font-bold text-indigo-600 text-sm">${m.name}</h3><p class="text-[10px] text-slate-400 font-bold">${m.email || "Visitor"}</p></div>
                         <button onclick="deleteMessage(${m.id})" class="text-red-400 text-xs font-bold">Delete</button>
                     </div>
-                    <p class="text-slate-600 text-xs mb-4 leading-relaxed">${m.message}</p>
-                    <a href="mailto:${m.email}?subject=Reply to ${m.name}" class="text-[11px] bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-bold">Reply via Email</a>
+                    <p class="text-slate-600 text-xs mb-4">${m.message}</p>
+                    <a href="mailto:${m.email}?subject=Reply to ${m.name}" class="text-[11px] bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-bold">✉️ Reply</a>
                 </div>
             `,
           )
@@ -358,17 +361,18 @@
         }
       }
 
+      // PROJECTS
       async function fetchManageProjects() {
         const res = await fetch("/api/projects");
         const data = await res.json();
         document.getElementById("manage-project-list").innerHTML = data
           .map(
             (p) => `
-                <tr class="border-b last:border-0 hover:bg-slate-50 transition">
-                    <td class="py-4 pr-4 font-bold text-slate-700 text-sm truncate max-w-[150px]">${p.title}</td>
+                <tr class="border-b last:border-0">
+                    <td class="py-4 font-bold text-slate-700 text-sm">${p.title}</td>
                     <td class="py-4 text-right flex gap-2 justify-end">
-                        <button onclick='setupEdit(${JSON.stringify(p)})' class="text-[10px] bg-slate-100 px-3 py-2 rounded-lg font-bold">Edit</button>
-                        <button onclick="deleteProject(${p.id})" class="text-[10px] bg-red-50 text-red-500 px-3 py-2 rounded-lg font-bold">Delete</button>
+                        <button onclick='editProject(${JSON.stringify(p)})' class="bg-slate-100 px-4 py-2 rounded-lg text-xs font-bold">Edit</button>
+                        <button onclick="deleteProject(${p.id})" class="text-red-500 text-xs font-bold px-2">Delete</button>
                     </td>
                 </tr>
             `,
@@ -376,17 +380,17 @@
           .join("");
       }
 
-      function setupEdit(p) {
+      function editProject(p) {
         document.getElementById("edit-id").value = p.id;
         document.getElementById("p-title").value = p.title;
         document.getElementById("p-desc").value = p.description;
         document.getElementById("p-tags").value = p.tags;
         document.getElementById("p-img").value = p.image_url;
         document.getElementById("p-link").value = p.link;
-        document.getElementById("form-title").innerText = "📝 Editing Project";
+        document.getElementById("menu-selector").value = "editor";
+        switchTab("editor");
         document.getElementById("submit-btn").innerText = "Update Project";
         document.getElementById("cancel-btn").classList.remove("hidden");
-        window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
       function resetForm() {
@@ -419,8 +423,9 @@
           body: JSON.stringify(projectData),
         });
         resetForm();
+        document.getElementById("menu-selector").value = "projects";
+        switchTab("projects");
         fetchManageProjects();
-        alert("Success!");
       };
     </script>
   </body>

@@ -1,373 +1,192 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      http-equiv="Cross-Origin-Opener-Policy"
-      content="same-origin-allow-popups"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <title>Admin Panel | Seyha Em</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-      body {
-        font-family: "Plus Jakarta Sans", sans-serif;
-      }
-      .tab-content {
-        display: none;
-      }
-      .tab-content.active {
-        display: block;
-        animation: fadeIn 0.3s ease;
-      }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
-  </head>
-  <body class="bg-slate-50 min-h-screen">
-    <div
-      id="login-overlay"
-      class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4"
-    >
-      <div
-        class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center"
-      >
-        <div
-          class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold"
-        >
-          S
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+    <div id="login-overlay" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4">
+        <div class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center">
+            <div class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold">S</div>
+            <h2 class="text-2xl font-bold mb-8 italic text-slate-900">Admin Login</h2>
+            <div id="g_id_onload" data-client_id="479851271829-ou0q6pa3kl4nvjn7d4sikg6ef2v01bhj.apps.googleusercontent.com" data-callback="handleCredentialResponse" data-ux_mode="popup" data-auto_prompt="false"></div>
+            <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill" data-theme="outline" data-size="large"></div>
+            <a href="index.html" class="block mt-8 text-slate-400 text-sm hover:underline">← Back to Site</a>
         </div>
-        <h2 class="text-2xl font-bold mb-8 italic text-slate-900">
-          Admin Login
-        </h2>
-        <div
-          id="g_id_onload"
-          data-client_id="479851271829-ou0q6pa3kl4nvjn7d4sikg6ef2v01bhj.apps.googleusercontent.com"
-          data-callback="handleCredentialResponse"
-          data-ux_mode="popup"
-          data-auto_prompt="false"
-        ></div>
-        <div
-          class="g_id_signin flex justify-center"
-          data-type="standard"
-          data-shape="pill"
-          data-theme="outline"
-          data-size="large"
-        ></div>
-        <a
-          href="index.html"
-          class="block mt-8 text-slate-400 text-sm hover:underline"
-          >← Back to Site</a
-        >
-      </div>
     </div>
 
     <div id="admin-content" class="hidden">
-      <nav class="bg-white border-b sticky top-0 z-40">
-        <div
-          class="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between"
-        >
-          <div class="flex items-center gap-3">
-            <img
-              id="header-logo"
-              src=""
-              class="w-10 h-10 rounded-full border-2 border-indigo-600 p-0.5 object-cover"
-              onerror="this.src = 'https://via.placeholder.com/150'"
-            />
-            <span class="font-extrabold italic hidden md:block text-slate-900"
-              >Seyha<span class="text-indigo-600">.Admin</span></span
-            >
-          </div>
+        <nav class="bg-white border-b sticky top-0 z-40">
+            <div class="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img id="header-logo" src="" class="w-10 h-10 rounded-full border-2 border-indigo-600 p-0.5 object-cover" onerror="this.src='https://via.placeholder.com/150'">
+                    <span class="font-extrabold italic hidden md:block text-slate-900">Seyha<span class="text-indigo-600">.Admin</span></span>
+                </div>
 
-          <div class="flex-grow max-w-xs mx-4">
-            <select
-              id="menu-selector"
-              onchange="switchTab(this.value)"
-              class="w-full p-3 bg-slate-100 border-none rounded-xl text-sm font-bold text-slate-700 outline-none ring-2 ring-transparent focus:ring-indigo-500 transition"
-            >
-              <option value="profile">👤 Profile & Content</option>
-              <option value="editor">🚀 Project Editor</option>
-              <option value="inbox">📩 Inbox Messages</option>
-              <option value="projects">📂 Existing Projects</option>
-            </select>
-          </div>
+                <div class="flex-grow max-w-xs mx-4">
+                    <select id="menu-selector" onchange="switchTab(this.value)" class="w-full p-3 bg-slate-100 border-none rounded-xl text-sm font-bold text-slate-700 outline-none ring-2 ring-transparent focus:ring-indigo-500 transition">
+                        <option value="profile">👤 Profile & Content</option>
+                        <option value="editor">🚀 Project Editor</option>
+                        <option value="inbox">📩 Inbox Messages</option>
+                        <option value="projects">📂 Existing Projects</option>
+                    </select>
+                </div>
 
-          <button
-            onclick="logout()"
-            class="px-4 py-2 text-red-500 font-bold text-xs hover:bg-red-50 rounded-lg transition"
-          >
-            Logout
-          </button>
-        </div>
-      </nav>
-
-      <main class="max-w-4xl mx-auto p-4 md:p-8">
-        <section id="tab-profile" class="tab-content active">
-          <div
-            class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border space-y-6"
-          >
-            <h2 class="text-xl font-bold text-indigo-600 italic">
-              Profile Settings
-            </h2>
-            <div
-              class="flex flex-col md:flex-row items-center gap-6 pb-6 border-b"
-            >
-              <img
-                id="preview-logo"
-                src=""
-                class="w-24 h-24 rounded-full border-4 border-slate-50 shadow-md object-cover"
-              />
-              <input
-                type="url"
-                id="logo-input"
-                placeholder="Logo URL"
-                class="flex-grow p-4 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500"
-              />
+                <button onclick="logout()" class="px-4 py-2 text-red-500 font-bold text-xs hover:bg-red-50 rounded-lg transition">Logout</button>
             </div>
-            <div class="space-y-4">
-              <input
-                type="text"
-                id="title-input"
-                placeholder="Job Title"
-                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
-              />
-              <textarea
-                id="bio-input"
-                rows="4"
-                placeholder="Greeting Bio"
-                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
-              ></textarea>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="email"
-                id="gmail-input"
-                placeholder="Gmail"
-                class="p-4 bg-slate-50 border rounded-xl text-sm outline-none"
-              />
-              <input
-                type="text"
-                id="tele-input"
-                placeholder="Telegram Link"
-                class="p-4 bg-slate-50 border rounded-xl text-sm outline-none"
-              />
-            </div>
-            <button
-              onclick="saveProfile()"
-              class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-indigo-200 active:scale-95 transition"
-            >
-              SAVE ALL CHANGES
-            </button>
-          </div>
-        </section>
+        </nav>
 
-        <section id="tab-editor" class="tab-content">
-          <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
-            <h2
-              id="form-title"
-              class="text-xl font-bold text-amber-500 mb-6 italic"
-            >
-              Project Editor
-            </h2>
-            <form id="uploadForm" class="space-y-4">
-              <input type="hidden" id="edit-id" />
-              <input
-                type="text"
-                id="p-title"
-                placeholder="Project Name"
-                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
-                required
-              />
-              <input
-                type="text"
-                id="p-tags"
-                placeholder="Tags"
-                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
-              />
-              <textarea
-                id="p-desc"
-                placeholder="Description"
-                rows="4"
-                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
-                required
-              ></textarea>
-              <input
-                type="url"
-                id="p-img"
-                placeholder="Screenshot URL"
-                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
-              />
-              <input
-                type="url"
-                id="p-link"
-                placeholder="Demo Link"
-                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
-              />
-              <button
-                type="submit"
-                id="submit-btn"
-                class="w-full bg-amber-500 text-white py-4 rounded-2xl font-bold shadow-lg shadow-amber-200 active:scale-95 transition"
-              >
-                SAVE PROJECT
-              </button>
-              <button
-                type="button"
-                id="cancel-btn"
-                onclick="resetForm()"
-                class="hidden w-full mt-2 text-slate-400 font-bold"
-              >
-                Cancel
-              </button>
-            </form>
-          </div>
-        </section>
+        <main class="max-w-4xl mx-auto p-4 md:p-8">
+            
+            <section id="tab-profile" class="tab-content active">
+                <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border space-y-6">
+                    <h2 class="text-xl font-bold text-indigo-600 italic">Profile Settings</h2>
+                    <div class="flex flex-col md:flex-row items-center gap-6 pb-6 border-b">
+                        <img id="preview-logo" src="" class="w-24 h-24 rounded-full border-4 border-slate-50 shadow-md object-cover">
+                        <input type="url" id="logo-input" placeholder="Logo URL" class="flex-grow p-4 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="space-y-4">
+                        <input type="text" id="title-input" placeholder="Job Title" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none">
+                        <textarea id="bio-input" rows="4" placeholder="Greeting Bio" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="email" id="gmail-input" placeholder="Gmail" class="p-4 bg-slate-50 border rounded-xl text-sm outline-none">
+                        <input type="text" id="tele-input" placeholder="Telegram Link" class="p-4 bg-slate-50 border rounded-xl text-sm outline-none">
+                    </div>
+                    <button onclick="saveProfile()" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-indigo-200 active:scale-95 transition">SAVE ALL CHANGES</button>
+                </div>
+            </section>
 
-        <section id="tab-inbox" class="tab-content">
-          <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
-            <h2 class="text-xl font-bold text-emerald-600 mb-6 italic">
-              Inbox Messages
-            </h2>
-            <div
-              id="message-container"
-              class="space-y-4 text-center text-slate-400 italic"
-            >
-              Loading messages...
-            </div>
-          </div>
-        </section>
+            <section id="tab-editor" class="tab-content">
+                <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
+                    <h2 id="form-title" class="text-xl font-bold text-amber-500 mb-6 italic">Project Editor</h2>
+                    <form id="uploadForm" class="space-y-4">
+                        <input type="hidden" id="edit-id">
+                        <input type="text" id="p-title" placeholder="Project Name" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none" required>
+                        <input type="text" id="p-tags" placeholder="Tags" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none">
+                        <textarea id="p-desc" placeholder="Description" rows="4" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none" required></textarea>
+                        <input type="url" id="p-img" placeholder="Screenshot URL" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none">
+                        <input type="url" id="p-link" placeholder="Demo Link" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none">
+                        <button type="submit" id="submit-btn" class="w-full bg-amber-500 text-white py-4 rounded-2xl font-bold shadow-lg shadow-amber-200 active:scale-95 transition">SAVE PROJECT</button>
+                        <button type="button" id="cancel-btn" onclick="resetForm()" class="hidden w-full mt-2 text-slate-400 font-bold">Cancel</button>
+                    </form>
+                </div>
+            </section>
 
-        <section id="tab-projects" class="tab-content">
-          <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
-            <h2 class="text-xl font-bold text-slate-800 mb-6 italic">
-              Manage Projects
-            </h2>
-            <div class="overflow-x-auto">
-              <table class="w-full text-left min-w-[400px]">
-                <tbody id="manage-project-list"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-      </main>
+            <section id="tab-inbox" class="tab-content">
+                <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
+                    <h2 class="text-xl font-bold text-emerald-600 mb-6 italic">Inbox Messages</h2>
+                    <div id="message-container" class="space-y-4 text-center text-slate-400 italic">Loading messages...</div>
+                </div>
+            </section>
+
+            <section id="tab-projects" class="tab-content">
+                <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
+                    <h2 class="text-xl font-bold text-slate-800 mb-6 italic">Manage Projects</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left min-w-[400px]">
+                            <tbody id="manage-project-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
     </div>
 
     <script>
-      // Tab Switching Logic
-      function switchTab(tabId) {
-        document
-          .querySelectorAll(".tab-content")
-          .forEach((tab) => tab.classList.remove("active"));
-        document.getElementById("tab-" + tabId).classList.add("active");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
-      // AUTH
-      function handleCredentialResponse(response) {
-        const payload = JSON.parse(atob(response.credential.split(".")[1]));
-        if (payload.email === "seyhaemdev@gmail.com") {
-          sessionStorage.setItem("isLoggedIn", "true");
-          sessionStorage.setItem("userName", payload.name);
-          showAdmin();
-        } else {
-          alert("Unauthorized!");
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-      }
-      function showAdmin() {
-        document.getElementById("login-overlay").classList.add("hidden");
-        document.getElementById("admin-content").classList.remove("hidden");
-        fetchProfile();
-        fetchManageProjects();
-        fetchMessages();
-      }
-      function logout() {
-        sessionStorage.clear();
-        location.reload();
-      }
-      if (sessionStorage.getItem("isLoggedIn") === "true") showAdmin();
 
-      // PROFILE & CONTENT
-      async function fetchProfile() {
-        const res = await fetch("/api/profile");
-        const data = await res.json();
-        if (data.logo_url) {
-          document.getElementById("header-logo").src = data.logo_url;
-          document.getElementById("preview-logo").src = data.logo_url;
-          document.getElementById("logo-input").value = data.logo_url;
+        // AUTH
+        function handleCredentialResponse(response) {
+            const payload = JSON.parse(atob(response.credential.split(".")[1]));
+            if (payload.email === "seyhaemdev@gmail.com") {
+                sessionStorage.setItem("isLoggedIn", "true");
+                sessionStorage.setItem("userName", payload.name);
+                showAdmin();
+            } else { alert("Unauthorized!"); }
         }
-        document.getElementById("title-input").value = data.title || "";
-        document.getElementById("bio-input").value = data.bio || "";
-        document.getElementById("gmail-input").value = data.gmail || "";
-        document.getElementById("tele-input").value = data.telegram || "";
-      }
-
-      async function saveProfile() {
-        const payload = {
-          logo_url: document.getElementById("logo-input").value,
-          title: document.getElementById("title-input").value,
-          bio: document.getElementById("bio-input").value,
-          gmail: document.getElementById("gmail-input").value,
-          telegram: document.getElementById("tele-input").value,
-        };
-        await fetch("/api/profile", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        alert("Updated Successfully! ✅");
-        fetchProfile();
-      }
-
-      // MESSAGES
-      async function fetchMessages() {
-        const res = await fetch("/api/messages");
-        const data = await res.json();
-        const container = document.getElementById("message-container");
-        if (data.length === 0) {
-          container.innerHTML = "No messages.";
-          return;
+        function showAdmin() {
+            document.getElementById("login-overlay").classList.add("hidden");
+            document.getElementById("admin-content").classList.remove("hidden");
+            fetchProfile(); fetchManageProjects(); fetchMessages();
         }
-        container.innerHTML = data
-          .map(
-            (m) => `
+        function logout() { sessionStorage.clear(); location.reload(); }
+        if (sessionStorage.getItem("isLoggedIn") === "true") showAdmin();
+
+        // PROFILE & CONTENT
+        async function fetchProfile() {
+            const res = await fetch("/api/profile");
+            const data = await res.json();
+            if(data.logo_url) {
+                document.getElementById("header-logo").src = data.logo_url;
+                document.getElementById("preview-logo").src = data.logo_url;
+                document.getElementById("logo-input").value = data.logo_url;
+            }
+            document.getElementById("title-input").value = data.title || "";
+            document.getElementById("bio-input").value = data.bio || "";
+            document.getElementById("gmail-input").value = data.gmail || "";
+            document.getElementById("tele-input").value = data.telegram || "";
+        }
+
+        async function saveProfile() {
+            const payload = {
+                logo_url: document.getElementById("logo-input").value,
+                title: document.getElementById("title-input").value,
+                bio: document.getElementById("bio-input").value,
+                gmail: document.getElementById("gmail-input").value,
+                telegram: document.getElementById("tele-input").value
+            };
+            await fetch("/api/profile", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            alert("Updated Successfully! ✅");
+            fetchProfile();
+        }
+
+        // MESSAGES
+        async function fetchMessages() {
+            const res = await fetch("/api/messages");
+            const data = await res.json();
+            const container = document.getElementById("message-container");
+            if(data.length === 0) { container.innerHTML = "No messages."; return; }
+            container.innerHTML = data.map(m => `
                 <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
                     <div class="flex justify-between items-start mb-2">
-                        <div><h3 class="font-bold text-indigo-600 text-sm">${m.name}</h3><p class="text-[10px] text-slate-400 font-bold">${m.email || "Visitor"}</p></div>
+                        <div><h3 class="font-bold text-indigo-600 text-sm">${m.name}</h3><p class="text-[10px] text-slate-400 font-bold">${m.email || 'Visitor'}</p></div>
                         <button onclick="deleteMessage(${m.id})" class="text-red-400 text-xs font-bold">Delete</button>
                     </div>
                     <p class="text-slate-600 text-xs mb-4">${m.message}</p>
                     <a href="mailto:${m.email}?subject=Reply to ${m.name}" class="text-[11px] bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-bold">✉️ Reply</a>
                 </div>
-            `,
-          )
-          .join("");
-      }
-      async function deleteMessage(id) {
-        if (confirm("Delete?")) {
-          await fetch(`/api/messages/${id}`, { method: "DELETE" });
-          fetchMessages();
+            `).join("");
         }
-      }
+        async function deleteMessage(id) { if(confirm("Delete?")) { await fetch(`/api/messages/${id}`, { method: "DELETE" }); fetchMessages(); } }
 
-      // PROJECTS
-      async function fetchManageProjects() {
-        const res = await fetch("/api/projects");
-        const data = await res.json();
-        document.getElementById("manage-project-list").innerHTML = data
-          .map(
-            (p) => `
+        // PROJECTS
+        async function fetchManageProjects() {
+            const res = await fetch("/api/projects");
+            const data = await res.json();
+            document.getElementById("manage-project-list").innerHTML = data.map(p => `
                 <tr class="border-b last:border-0">
                     <td class="py-4 font-bold text-slate-700 text-sm">${p.title}</td>
                     <td class="py-4 text-right flex gap-2 justify-end">
@@ -375,58 +194,51 @@
                         <button onclick="deleteProject(${p.id})" class="text-red-500 text-xs font-bold px-2">Delete</button>
                     </td>
                 </tr>
-            `,
-          )
-          .join("");
-      }
-
-      function editProject(p) {
-        document.getElementById("edit-id").value = p.id;
-        document.getElementById("p-title").value = p.title;
-        document.getElementById("p-desc").value = p.description;
-        document.getElementById("p-tags").value = p.tags;
-        document.getElementById("p-img").value = p.image_url;
-        document.getElementById("p-link").value = p.link;
-        document.getElementById("menu-selector").value = "editor";
-        switchTab("editor");
-        document.getElementById("submit-btn").innerText = "Update Project";
-        document.getElementById("cancel-btn").classList.remove("hidden");
-      }
-
-      function resetForm() {
-        document.getElementById("uploadForm").reset();
-        document.getElementById("edit-id").value = "";
-        document.getElementById("submit-btn").innerText = "Save Project";
-        document.getElementById("cancel-btn").classList.add("hidden");
-      }
-
-      async function deleteProject(id) {
-        if (confirm("Delete?")) {
-          await fetch(`/api/projects/${id}`, { method: "DELETE" });
-          fetchManageProjects();
+            `).join("");
         }
-      }
 
-      document.getElementById("uploadForm").onsubmit = async (e) => {
-        e.preventDefault();
-        const id = document.getElementById("edit-id").value;
-        const projectData = {
-          title: document.getElementById("p-title").value,
-          description: document.getElementById("p-desc").value,
-          tags: document.getElementById("p-tags").value,
-          image_url: document.getElementById("p-img").value,
-          link: document.getElementById("p-link").value,
+        function editProject(p) {
+            document.getElementById("edit-id").value = p.id;
+            document.getElementById("p-title").value = p.title;
+            document.getElementById("p-desc").value = p.description;
+            document.getElementById("p-tags").value = p.tags;
+            document.getElementById("p-img").value = p.image_url;
+            document.getElementById("p-link").value = p.link;
+            document.getElementById("menu-selector").value = "editor";
+            switchTab("editor");
+            document.getElementById("submit-btn").innerText = "Update Project";
+            document.getElementById("cancel-btn").classList.remove("hidden");
+        }
+
+        function resetForm() {
+            document.getElementById("uploadForm").reset();
+            document.getElementById("edit-id").value = "";
+            document.getElementById("submit-btn").innerText = "Save Project";
+            document.getElementById("cancel-btn").classList.add("hidden");
+        }
+
+        async function deleteProject(id) { if(confirm("Delete?")) { await fetch(`/api/projects/${id}`, { method: "DELETE" }); fetchManageProjects(); } }
+
+        document.getElementById("uploadForm").onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById("edit-id").value;
+            const projectData = {
+                title: document.getElementById("p-title").value,
+                description: document.getElementById("p-desc").value,
+                tags: document.getElementById("p-tags").value,
+                image_url: document.getElementById("p-img").value,
+                link: document.getElementById("p-link").value,
+            };
+            await fetch(id ? `/api/projects/${id}` : '/api/projects', {
+                method: id ? "PUT" : "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(projectData)
+            });
+            resetForm(); 
+            document.getElementById("menu-selector").value = "projects";
+            switchTab("projects");
+            fetchManageProjects();
         };
-        await fetch(id ? `/api/projects/${id}` : "/api/projects", {
-          method: id ? "PUT" : "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(projectData),
-        });
-        resetForm();
-        document.getElementById("menu-selector").value = "projects";
-        switchTab("projects");
-        fetchManageProjects();
-      };
     </script>
-  </body>
+</body>
 </html>
