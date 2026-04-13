@@ -13,15 +13,21 @@ const pool = new Pool({
 });
 
 /**
- * --- SECTION: PROFILE (LOGO) ---
+ * --- SECTION: PROFILE & CONTENT SETTINGS ---
  */
 
-// API: ទាញយករូប Logo មកបង្ហាញ
+// API: ទាញយកព័ត៌មាន Profile ទាំងអស់ (Logo, Title, Bio, Contacts)
 app.get('/api/profile', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT logo_url FROM profile WHERE id = 1');
+    const { rows } = await pool.query('SELECT logo_url, title, bio, gmail, telegram FROM profile WHERE id = 1');
     if (rows.length === 0) {
-      return res.json({ logo_url: 'https://via.placeholder.com/150' });
+      return res.json({ 
+        logo_url: 'https://via.placeholder.com/150',
+        title: 'Full-Stack Developer',
+        bio: 'ជំរាបសួរ...',
+        gmail: '',
+        telegram: ''
+      });
     }
     res.json(rows[0]);
   } catch (err) {
@@ -29,13 +35,18 @@ app.get('/api/profile', async (req, res) => {
   }
 });
 
-// API: អាប់ដេតរូប Logo ថ្មី
+// API: អាប់ដេតព័ត៌មាន Profile ទាំងអស់
 app.put('/api/profile', async (req, res) => {
-  const { logo_url } = req.body;
+  const { logo_url, title, bio, gmail, telegram } = req.body;
   try {
-    const query = 'UPDATE profile SET logo_url = $1, updated_at = CURRENT_TIMESTAMP WHERE id = 1';
-    await pool.query(query, [logo_url]);
-    res.json({ success: true, message: "Logo updated successfully" });
+    const query = `
+      UPDATE profile 
+      SET logo_url = $1, title = $2, bio = $3, gmail = $4, telegram = $5, updated_at = CURRENT_TIMESTAMP 
+      WHERE id = 1
+    `;
+    const values = [logo_url, title, bio, gmail, telegram];
+    await pool.query(query, values);
+    res.json({ success: true, message: "Profile updated successfully" });
   } catch (err) {
     res.status(500).json({ error: "Profile Update Error: " + err.message });
   }
