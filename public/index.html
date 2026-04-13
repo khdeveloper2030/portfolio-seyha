@@ -1,244 +1,379 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    <title>Admin Panel | Seyha Em</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Seyha Em | Portfolio</title>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
-</head>
-<body class="bg-slate-50 min-h-screen">
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        scroll-behavior: smooth;
+      }
+      .mobile-menu {
+        transition: 0.3s ease-in-out;
+      }
+      .mobile-menu.closed {
+        transform: translateX(100%);
+      }
 
-    <div id="login-overlay" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center p-4">
-        <div class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center">
-            <div class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold">S</div>
-            <h2 class="text-2xl font-bold mb-8 italic text-slate-900">Admin Login</h2>
-            <div id="g_id_onload" data-client_id="479851271829-ou0q6pa3kl4nvjn7d4sikg6ef2v01bhj.apps.googleusercontent.com" data-callback="handleCredentialResponse" data-ux_mode="popup" data-auto_prompt="false"></div>
-            <div class="g_id_signin flex justify-center" data-type="standard" data-shape="pill" data-theme="outline" data-size="large"></div>
-            <a href="index.html" class="block mt-8 text-slate-400 text-sm hover:underline">← Back to Site</a>
-        </div>
+      /* Splash Screen CSS */
+      #splash-screen {
+        position: fixed;
+        inset: 0;
+        background: #0f172a; /* Slate-900 */
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition:
+          opacity 0.8s ease,
+          visibility 0.8s;
+      }
+      .splash-logo {
+        width: 80px;
+        height: 80px;
+        background: #4f46e5;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2.5rem;
+        font-weight: bold;
+        box-shadow: 0 0 30px rgba(79, 70, 229, 0.4);
+        animation: pulse 2s infinite;
+      }
+      .splash-text {
+        margin-top: 20px;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.05em;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.8;
+        }
+      }
+
+      /* Content Wrapper */
+      #main-wrapper {
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+      #main-wrapper.visible {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 text-slate-900 overflow-x-hidden">
+    <div id="splash-screen">
+      <div class="splash-logo">S</div>
+      <div class="splash-text">
+        SEYHA<span class="text-indigo-500">.DEV</span>
+      </div>
+      <div class="mt-4 w-48 h-1 bg-slate-800 rounded-full overflow-hidden">
+        <div
+          id="progress-bar"
+          class="h-full bg-indigo-600 w-0 transition-all duration-[2000ms]"
+        ></div>
+      </div>
     </div>
 
-    <div id="admin-content" class="hidden">
-        <nav class="bg-white border-b sticky top-0 z-40">
-            <div class="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <img id="header-logo" src="" class="w-10 h-10 rounded-full border-2 border-indigo-600 p-0.5 object-cover" onerror="this.src='https://via.placeholder.com/150'">
-                    <span class="font-extrabold italic hidden md:block text-slate-900">Seyha<span class="text-indigo-600">.Admin</span></span>
-                </div>
-
-                <div class="flex-grow max-w-xs mx-4">
-                    <select id="menu-selector" onchange="switchTab(this.value)" class="w-full p-3 bg-slate-100 border-none rounded-xl text-sm font-bold text-slate-700 outline-none ring-2 ring-transparent focus:ring-indigo-500 transition">
-                        <option value="profile">👤 Profile & Content</option>
-                        <option value="editor">🚀 Project Editor</option>
-                        <option value="inbox">📩 Inbox Messages</option>
-                        <option value="projects">📂 Existing Projects</option>
-                    </select>
-                </div>
-
-                <button onclick="logout()" class="px-4 py-2 text-red-500 font-bold text-xs hover:bg-red-50 rounded-lg transition">Logout</button>
+    <div id="main-wrapper">
+      <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b">
+        <div
+          class="max-w-6xl mx-auto px-4 md:px-6 py-4 flex justify-between items-center"
+        >
+          <div class="flex items-center gap-2">
+            <div
+              class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg"
+            >
+              S
             </div>
-        </nav>
+            <span class="text-xl font-extrabold tracking-tighter uppercase"
+              >Seyha<span class="text-indigo-600">.Dev</span></span
+            >
+          </div>
+          <div
+            class="hidden md:flex gap-8 font-semibold text-slate-600 items-center text-sm"
+          >
+            <a href="#projects" class="hover:text-indigo-600 transition"
+              >Projects</a
+            >
+            <a href="#contact" class="hover:text-indigo-600 transition"
+              >Contact</a
+            >
+            <a
+              href="admin.html"
+              class="bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-700 transition shadow-md"
+              >Login</a
+            >
+          </div>
+          <button id="menu-toggle" class="md:hidden text-slate-900">
+            <svg
+              class="w-7 h-7"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16m-7 6h7"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </nav>
 
-        <main class="max-w-4xl mx-auto p-4 md:p-8">
-            
-            <section id="tab-profile" class="tab-content active">
-                <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border space-y-6">
-                    <h2 class="text-xl font-bold text-indigo-600 italic">Profile Settings</h2>
-                    <div class="flex flex-col md:flex-row items-center gap-6 pb-6 border-b">
-                        <img id="preview-logo" src="" class="w-24 h-24 rounded-full border-4 border-slate-50 shadow-md object-cover">
-                        <input type="url" id="logo-input" placeholder="Logo URL" class="flex-grow p-4 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500">
-                    </div>
-                    <div class="space-y-4">
-                        <input type="text" id="title-input" placeholder="Job Title" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none">
-                        <textarea id="bio-input" rows="4" placeholder="Greeting Bio" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"></textarea>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="email" id="gmail-input" placeholder="Gmail" class="p-4 bg-slate-50 border rounded-xl text-sm outline-none">
-                        <input type="text" id="tele-input" placeholder="Telegram Link" class="p-4 bg-slate-50 border rounded-xl text-sm outline-none">
-                    </div>
-                    <button onclick="saveProfile()" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-indigo-200 active:scale-95 transition">SAVE ALL CHANGES</button>
+      <div
+        id="mobile-menu"
+        class="mobile-menu closed fixed inset-0 z-40 bg-white md:hidden flex flex-col items-center justify-center gap-8 text-2xl font-bold"
+      >
+        <button id="menu-close" class="absolute top-6 right-6 text-3xl">
+          ×
+        </button>
+        <a href="#projects" class="m-link">Projects</a>
+        <a href="#contact" class="m-link">Contact</a>
+        <a
+          href="admin.html"
+          class="bg-indigo-600 text-white px-8 py-3 rounded-full"
+          >Login</a
+        >
+      </div>
+
+      <header class="max-w-6xl mx-auto px-4 py-16 md:py-24 text-center">
+        <div class="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-8">
+          <div
+            class="absolute inset-0 bg-indigo-600 rounded-full blur-3xl opacity-10 animate-pulse"
+          ></div>
+          <img
+            id="main-logo"
+            src="https://via.placeholder.com/150"
+            alt="Seyha Logo"
+            class="relative w-full h-full object-cover rounded-full border-4 border-white shadow-2xl"
+          />
+        </div>
+        <h1
+          class="text-4xl md:text-7xl font-extrabold mb-6 tracking-tight leading-tight italic"
+        >
+          <span id="display-title">Full-Stack Developer</span>
+        </h1>
+        <p
+          id="display-bio"
+          class="text-slate-500 italic max-w-2xl mx-auto text-sm md:text-lg px-4 leading-relaxed font-medium"
+        >
+          "Loading bio..."
+        </p>
+      </header>
+
+      <section id="projects" class="max-w-6xl mx-auto px-4 md:px-6 py-10">
+        <h2
+          class="text-2xl md:text-3xl font-bold mb-10 border-l-4 border-indigo-600 pl-4 text-slate-800 italic uppercase"
+        >
+          Featured Projects
+        </h2>
+        <div
+          id="project-list"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+        ></div>
+      </section>
+
+      <section
+        id="contact"
+        class="max-w-6xl mx-auto px-4 md:px-6 py-16 md:py-24"
+      >
+        <div
+          class="bg-indigo-900 rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-12 text-white flex flex-col lg:flex-row gap-12 shadow-2xl relative overflow-hidden border border-indigo-800"
+        >
+          <div class="lg:w-1/2 z-10">
+            <h2
+              class="text-3xl md:text-4xl font-bold mb-6 italic text-white uppercase"
+            >
+              Let's Connect
+            </h2>
+            <div class="space-y-4">
+              <div
+                class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/10"
+              >
+                <span class="text-2xl">📧</span>
+                <div class="overflow-hidden">
+                  <p class="text-[10px] text-indigo-300 uppercase font-bold">
+                    Email
+                  </p>
+                  <p id="display-gmail" class="font-bold text-sm truncate">
+                    Loading...
+                  </p>
                 </div>
-            </section>
-
-            <section id="tab-editor" class="tab-content">
-                <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
-                    <h2 id="form-title" class="text-xl font-bold text-amber-500 mb-6 italic">Project Editor</h2>
-                    <form id="uploadForm" class="space-y-4">
-                        <input type="hidden" id="edit-id">
-                        <input type="text" id="p-title" placeholder="Project Name" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none" required>
-                        <input type="text" id="p-tags" placeholder="Tags" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none">
-                        <textarea id="p-desc" placeholder="Description" rows="4" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none" required></textarea>
-                        <input type="url" id="p-img" placeholder="Screenshot URL" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none">
-                        <input type="url" id="p-link" placeholder="Demo Link" class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none">
-                        <button type="submit" id="submit-btn" class="w-full bg-amber-500 text-white py-4 rounded-2xl font-bold shadow-lg shadow-amber-200 active:scale-95 transition">SAVE PROJECT</button>
-                        <button type="button" id="cancel-btn" onclick="resetForm()" class="hidden w-full mt-2 text-slate-400 font-bold">Cancel</button>
-                    </form>
+              </div>
+              <a
+                id="display-tele-link"
+                href="#"
+                target="_blank"
+                class="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/20 hover:bg-white/20 transition group"
+              >
+                <span class="text-2xl group-hover:scale-110 transition"
+                  >✈️</span
+                >
+                <div>
+                  <p class="text-[10px] text-indigo-300 uppercase font-bold">
+                    Telegram
+                  </p>
+                  <p class="font-bold text-sm">Chat with me</p>
                 </div>
-            </section>
+              </a>
+            </div>
+          </div>
 
-            <section id="tab-inbox" class="tab-content">
-                <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
-                    <h2 class="text-xl font-bold text-emerald-600 mb-6 italic">Inbox Messages</h2>
-                    <div id="message-container" class="space-y-4 text-center text-slate-400 italic">Loading messages...</div>
-                </div>
-            </section>
+          <div
+            class="lg:w-1/2 bg-white/10 p-6 md:p-8 rounded-3xl backdrop-blur-md border border-white/20 z-10 shadow-inner"
+          >
+            <form id="contactForm" class="space-y-4">
+              <input
+                type="text"
+                id="s_name"
+                placeholder="Full Name"
+                class="w-full p-4 bg-white rounded-xl outline-none text-sm text-indigo-900"
+                required
+              />
+              <input
+                type="email"
+                id="s_email"
+                placeholder="Your Email"
+                class="w-full p-4 bg-white rounded-xl outline-none text-sm text-indigo-900"
+                required
+              />
+              <textarea
+                id="s_message"
+                placeholder="Message"
+                rows="4"
+                class="w-full p-4 bg-white rounded-xl outline-none text-sm text-indigo-900"
+                required
+              ></textarea>
+              <button
+                type="submit"
+                id="sendBtn"
+                class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg active:scale-95 transition text-sm uppercase"
+              >
+                Send Message
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
 
-            <section id="tab-projects" class="tab-content">
-                <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border">
-                    <h2 class="text-xl font-bold text-slate-800 mb-6 italic">Manage Projects</h2>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left min-w-[400px]">
-                            <tbody id="manage-project-list"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-        </main>
+      <footer
+        class="text-center py-10 text-slate-400 border-t bg-white px-4 text-xs md:text-sm"
+      >
+        <p>© 2026 Seyha Em - Crafted with ❤️</p>
+      </footer>
     </div>
 
     <script>
-        // Tab Switching Logic
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById('tab-' + tabId).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+      // --- Splash Screen Logic ---
+      window.addEventListener("DOMContentLoaded", () => {
+        const splash = document.getElementById("splash-screen");
+        const wrapper = document.getElementById("main-wrapper");
+        const progress = document.getElementById("progress-bar");
 
-        // AUTH
-        function handleCredentialResponse(response) {
-            const payload = JSON.parse(atob(response.credential.split(".")[1]));
-            if (payload.email === "seyhaemdev@gmail.com") {
-                sessionStorage.setItem("isLoggedIn", "true");
-                sessionStorage.setItem("userName", payload.name);
-                showAdmin();
-            } else { alert("Unauthorized!"); }
-        }
-        function showAdmin() {
-            document.getElementById("login-overlay").classList.add("hidden");
-            document.getElementById("admin-content").classList.remove("hidden");
-            fetchProfile(); fetchManageProjects(); fetchMessages();
-        }
-        function logout() { sessionStorage.clear(); location.reload(); }
-        if (sessionStorage.getItem("isLoggedIn") === "true") showAdmin();
+        document.body.style.overflow = "hidden"; // បិទ scroll ពេល loading
+        setTimeout(() => {
+          progress.style.width = "100%";
+        }, 100);
 
-        // PROFILE & CONTENT
-        async function fetchProfile() {
-            const res = await fetch("/api/profile");
-            const data = await res.json();
-            if(data.logo_url) {
-                document.getElementById("header-logo").src = data.logo_url;
-                document.getElementById("preview-logo").src = data.logo_url;
-                document.getElementById("logo-input").value = data.logo_url;
-            }
-            document.getElementById("title-input").value = data.title || "";
-            document.getElementById("bio-input").value = data.bio || "";
-            document.getElementById("gmail-input").value = data.gmail || "";
-            document.getElementById("tele-input").value = data.telegram || "";
-        }
+        setTimeout(() => {
+          splash.style.opacity = "0";
+          splash.style.visibility = "hidden";
+          wrapper.classList.add("visible");
+          document.body.style.overflow = "auto"; // បើក scroll វិញ
+        }, 2500);
+      });
 
-        async function saveProfile() {
-            const payload = {
-                logo_url: document.getElementById("logo-input").value,
-                title: document.getElementById("title-input").value,
-                bio: document.getElementById("bio-input").value,
-                gmail: document.getElementById("gmail-input").value,
-                telegram: document.getElementById("tele-input").value
-            };
-            await fetch("/api/profile", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-            alert("Updated Successfully! ✅");
-            fetchProfile();
-        }
+      // UI Logic
+      const menuToggle = document.getElementById("menu-toggle");
+      const mobileMenu = document.getElementById("mobile-menu");
+      menuToggle.onclick = () => mobileMenu.classList.toggle("closed");
+      document.getElementById("menu-close").onclick = () =>
+        mobileMenu.classList.add("closed");
+      document
+        .querySelectorAll(".m-link")
+        .forEach((l) => (l.onclick = () => mobileMenu.classList.add("closed")));
 
-        // MESSAGES
-        async function fetchMessages() {
-            const res = await fetch("/api/messages");
-            const data = await res.json();
-            const container = document.getElementById("message-container");
-            if(data.length === 0) { container.innerHTML = "No messages."; return; }
-            container.innerHTML = data.map(m => `
-                <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
-                    <div class="flex justify-between items-start mb-2">
-                        <div><h3 class="font-bold text-indigo-600 text-sm">${m.name}</h3><p class="text-[10px] text-slate-400 font-bold">${m.email || 'Visitor'}</p></div>
-                        <button onclick="deleteMessage(${m.id})" class="text-red-400 text-xs font-bold">Delete</button>
+      // ១. ទាញយក Profile ចេញពី Database មកបង្ហាញ
+      async function loadProfile() {
+        try {
+          const res = await fetch("/api/profile");
+          const data = await res.json();
+          if (data.logo_url)
+            document.getElementById("main-logo").src = data.logo_url;
+          if (data.title)
+            document.getElementById("display-title").innerText = data.title;
+          if (data.bio)
+            document.getElementById("display-bio").innerText = data.bio;
+          if (data.gmail)
+            document.getElementById("display-gmail").innerText = data.gmail;
+          if (data.telegram)
+            document.getElementById("display-tele-link").href = data.telegram;
+        } catch (err) {
+          console.error("Profile load failed:", err);
+        }
+      }
+
+      async function fetchProjects() {
+        const res = await fetch("/api/projects");
+        const data = await res.json();
+        document.getElementById("project-list").innerHTML = data
+          .map(
+            (p) => `
+                <div class="bg-white border border-slate-100 rounded-3xl overflow-hidden hover:shadow-2xl transition duration-500 flex flex-col h-full group">
+                    <img src="${p.image_url || "https://via.placeholder.com/600x400"}" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500">
+                    <div class="p-6 flex flex-col flex-grow text-center md:text-left">
+                        <span class="text-indigo-600 font-bold text-[10px] uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full w-fit mx-auto md:mx-0 mb-4">${p.tags || "Dev"}</span>
+                        <h3 class="text-lg font-bold text-slate-900 line-clamp-1 italic">${p.title}</h3>
+                        <p class="text-slate-500 text-sm mt-3 flex-grow line-clamp-3">${p.description}</p>
+                        <a href="${p.link}" target="_blank" class="mt-6 font-bold text-indigo-600 text-sm">Explore Project →</a>
                     </div>
-                    <p class="text-slate-600 text-xs mb-4">${m.message}</p>
-                    <a href="mailto:${m.email}?subject=Reply to ${m.name}" class="text-[11px] bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-bold">✉️ Reply</a>
                 </div>
-            `).join("");
-        }
-        async function deleteMessage(id) { if(confirm("Delete?")) { await fetch(`/api/messages/${id}`, { method: "DELETE" }); fetchMessages(); } }
+            `,
+          )
+          .join("");
+      }
 
-        // PROJECTS
-        async function fetchManageProjects() {
-            const res = await fetch("/api/projects");
-            const data = await res.json();
-            document.getElementById("manage-project-list").innerHTML = data.map(p => `
-                <tr class="border-b last:border-0">
-                    <td class="py-4 font-bold text-slate-700 text-sm">${p.title}</td>
-                    <td class="py-4 text-right flex gap-2 justify-end">
-                        <button onclick='editProject(${JSON.stringify(p)})' class="bg-slate-100 px-4 py-2 rounded-lg text-xs font-bold">Edit</button>
-                        <button onclick="deleteProject(${p.id})" class="text-red-500 text-xs font-bold px-2">Delete</button>
-                    </td>
-                </tr>
-            `).join("");
-        }
-
-        function editProject(p) {
-            document.getElementById("edit-id").value = p.id;
-            document.getElementById("p-title").value = p.title;
-            document.getElementById("p-desc").value = p.description;
-            document.getElementById("p-tags").value = p.tags;
-            document.getElementById("p-img").value = p.image_url;
-            document.getElementById("p-link").value = p.link;
-            document.getElementById("menu-selector").value = "editor";
-            switchTab("editor");
-            document.getElementById("submit-btn").innerText = "Update Project";
-            document.getElementById("cancel-btn").classList.remove("hidden");
-        }
-
-        function resetForm() {
-            document.getElementById("uploadForm").reset();
-            document.getElementById("edit-id").value = "";
-            document.getElementById("submit-btn").innerText = "Save Project";
-            document.getElementById("cancel-btn").classList.add("hidden");
-        }
-
-        async function deleteProject(id) { if(confirm("Delete?")) { await fetch(`/api/projects/${id}`, { method: "DELETE" }); fetchManageProjects(); } }
-
-        document.getElementById("uploadForm").onsubmit = async (e) => {
-            e.preventDefault();
-            const id = document.getElementById("edit-id").value;
-            const projectData = {
-                title: document.getElementById("p-title").value,
-                description: document.getElementById("p-desc").value,
-                tags: document.getElementById("p-tags").value,
-                image_url: document.getElementById("p-img").value,
-                link: document.getElementById("p-link").value,
-            };
-            await fetch(id ? `/api/projects/${id}` : '/api/projects', {
-                method: id ? "PUT" : "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(projectData)
-            });
-            resetForm(); 
-            document.getElementById("menu-selector").value = "projects";
-            switchTab("projects");
-            fetchManageProjects();
+      document.getElementById("contactForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById("sendBtn");
+        btn.innerText = "Sending...";
+        const data = {
+          name: document.getElementById("s_name").value,
+          email: document.getElementById("s_email").value,
+          message: document.getElementById("s_message").value,
         };
+        await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        alert("✅ Message Sent!");
+        e.target.reset();
+        btn.innerText = "Send Message";
+      };
+
+      loadProfile();
+      fetchProjects();
     </script>
-</body>
+  </body>
 </html>
