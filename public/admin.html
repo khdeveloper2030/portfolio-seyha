@@ -208,9 +208,7 @@
                 class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
                 required
               />
-              <label class="text-[10px] font-bold text-slate-400 uppercase ml-1"
-                >Project Category</label
-              >
+              <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Project Category</label>
               <select
                 id="p-category"
                 class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
@@ -298,205 +296,181 @@
     </div>
 
     <script>
-            // Tab Logic
-            function switchTab(tabId) {
-              document.querySelectorAll(".tab-content").forEach((tab) => tab.classList.remove("active"));
-              document.getElementById("tab-" + tabId).classList.add("active");
+      // Tab Logic
+      function switchTab(tabId) {
+        document.querySelectorAll(".tab-content").forEach((tab) => tab.classList.remove("active"));
+        document.getElementById("tab-" + tabId).classList.add("active");
+        
+        // បន្ថែមចលនាធ្លាក់ចុះ (Slide Down) ពេលប្តូរ Tab
+        const activeTab = document.getElementById("tab-" + tabId);
+        activeTab.style.animation = 'none';
+        activeTab.offsetHeight; /* trigger reflow */
+        activeTab.style.animation = 'fadeIn 0.4s ease';
 
-              // បន្ថែមចលនាធ្លាក់ចុះ (Slide Down) ពេលប្តូរ Tab
-              const activeTab = document.getElementById("tab-" + tabId);
-              activeTab.style.animation = 'none';
-              activeTab.offsetHeight; /* trigger reflow */
-              activeTab.style.animation = 'fadeIn 0.4s ease';
+        if (tabId === "inbox") fetchMessages();
+        if (tabId === "projects") fetchManageProjects();
+      }
 
-              if (tabId === "inbox") fetchMessages();
-              if (tabId === "projects") fetchManageProjects();
-            }
+      // AUTH
+      function handleCredentialResponse(response) {
+        const payload = JSON.parse(atob(response.credential.split(".")[1]));
+        if (payload.email === "seyhaemdev@gmail.com") {
+          sessionStorage.setItem("isLoggedIn", "true");
+          showAdmin();
+        } else {
+          alert("Unauthorized!");
+        }
+      }
+      function showAdmin() {
+        document.getElementById("login-overlay").classList.add("hidden");
+        document.getElementById("admin-content").classList.remove("hidden");
+        fetchProfile();
+        fetchMessages();
+        fetchManageProjects();
+      }
+      function logout() {
+        sessionStorage.clear();
+        location.reload();
+      }
+      if (sessionStorage.getItem("isLoggedIn") === "true") showAdmin();
 
-            // AUTH
-            function handleCredentialResponse(response) {
-              const payload = JSON.parse(atob(response.credential.split(".")[1]));
-              if (payload.email === "seyhaemdev@gmail.com") {
-                sessionStorage.setItem("isLoggedIn", "true");
-                showAdmin();
-              } else {
-                alert("Unauthorized!");
-              }
-            }
-            function showAdmin() {
-              document.getElementById("login-overlay").classList.add("hidden");
-              document.getElementById("admin-content").classList.remove("hidden");
-              fetchProfile();
-              fetchMessages();
-              fetchManageProjects();
-            }
-            function logout() {
-              sessionStorage.clear();
-              location.reload();
-            }
-            if (sessionStorage.getItem("isLoggedIn") === "true") showAdmin();
+      // PROFILE
+      async function fetchProfile() {
+        const res = await fetch("/api/profile");
+        const data = await res.json();
+        if (data.logo_url) {
+          document.getElementById("header-logo").src = data.logo_url;
+          document.getElementById("preview-logo").src = data.logo_url;
+          document.getElementById("logo-input").value = data.logo_url;
+        }
+        document.getElementById("title-input").value = data.title || "";
+        document.getElementById("bio-input").value = data.bio || "";
+        document.getElementById("gmail-input").value = data.gmail || "";
+        document.getElementById("tele-input").value = data.telegram || "";
+      }
 
-            // PROFILE
-            async function fetchProfile() {
-              const res = await fetch("/api/profile");
-              const data = await res.json();
-              if (data.logo_url) {
-                document.getElementById("header-logo").src = data.logo_url;
-                document.getElementById("preview-logo").src = data.logo_url;
-                document.getElementById("logo-input").value = data.logo_url;
-              }
-              document.getElementById("title-input").value = data.title || "";
-              document.getElementById("bio-input").value = data.bio || "";
-              document.getElementById("gmail-input").value = data.gmail || "";
-              document.getElementById("tele-input").value = data.telegram || "";
-            }
+      async function saveProfile() {
+        const payload = {
+          logo_url: document.getElementById("logo-input").value,
+          title: document.getElementById("title-input").value,
+          bio: document.getElementById("bio-input").value,
+          gmail: document.getElementById("gmail-input").value,
+          telegram: document.getElementById("tele-input").value,
+        };
+        await fetch("/api/profile", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        alert("Updated Successfully! ✅");
+        fetchProfile();
+      }
 
-            async function saveProfile() {
-              const payload = {
-                logo_url: document.getElementById("logo-input").value,
-                title: document.getElementById("title-input").value,
-                bio: document.getElementById("bio-input").value,
-                gmail: document.getElementById("gmail-input").value,
-                telegram: document.getElementById("tele-input").value,
-              };
-              await fetch("/api/profile", {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-              });
-              alert("Updated Successfully! ✅");
-              fetchProfile();
-            }
+      // MESSAGES (FIXED)
+      async function fetchMessages() {
+        const container = document.getElementById("message-container");
+        try {
+          const res = await fetch("/api/messages");
+          const data = await res.json();
+          if (data.length === 0) {
+            container.innerHTML =
+              "<p class='text-center text-slate-400 italic'>No messages yet.</p>";
+            return;
+          }
+          container.innerHTML = data
+            .map(
+              (m) => `
+                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                        <div class="flex justify-between items-start mb-2">
+                            <div><h3 class="font-bold text-indigo-600 text-sm">${m.name}</h3><p class="text-[10px] text-slate-400 font-bold">${m.email || "Visitor"}</p></div>
+                            <button onclick="deleteMessage(${m.id})" class="text-red-400 text-xs font-bold">Delete</button>
+                        </div>
+                        <p class="text-slate-600 text-xs mb-4 leading-relaxed">${m.message}</p>
+                        <a href="mailto:${m.email}?subject=Reply to ${m.name}" class="text-[11px] bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-bold">✉️ Reply Email</a>
+                    </div>
+                `,
+            )
+            .join("");
+        } catch (e) {
+          container.innerHTML = "Error loading messages.";
+        }
+      }
 
-            // MESSAGES (FIXED)
-            async function fetchMessages() {
-              const container = document.getElementById("message-container");
-              try {
-                const res = await fetch("/api/messages");
-                const data = await res.json();
-                if (data.length === 0) {
-                  container.innerHTML =
-                    "<p class='text-center text-slate-400 italic'>No messages yet.</p>";
-                  return;
-                }
-                container.innerHTML = data
-                  .map(
-                    (m) => `
-                          <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
-                              <div class="flex justify-between items-start mb-2">
-                                  <div><h3 class="font-bold text-indigo-600 text-sm">${m.name}</h3><p class="text-[10px] text-slate-400 font-bold">${m.email || "Visitor"}</p></div>
-                                  <button onclick="deleteMessage(${m.id})" class="text-red-400 text-xs font-bold">Delete</button>
-                              </div>
-                              <p class="text-slate-600 text-xs mb-4 leading-relaxed">${m.message}</p>
-                              <a href="mailto:${m.email}?subject=Reply to ${m.name}" class="text-[11px] bg-indigo-100 text-indigo-600 px-4 py-2 rounded-lg font-bold">✉️ Reply Email</a>
-                          </div>
-                      `,
-                  )
-                  .join("");
-              } catch (e) {
-                container.innerHTML = "Error loading messages.";
-              }
-            }
+      async function deleteMessage(id) {
+        if (confirm("Delete?")) {
+          await fetch(`/api/messages/${id}`, { method: "DELETE" });
+          fetchMessages();
+        }
+      }
 
-            async function deleteMessage(id) {
-              if (confirm("Delete?")) {
-                await fetch(`/api/messages/${id}`, { method: "DELETE" });
-                fetchMessages();
-              }
-            }
+      // PROJECTS
+      async function fetchManageProjects() {
+        const res = await fetch("/api/projects");
+        const data = await res.json();
+        document.getElementById("manage-project-list").innerHTML = data
+          .map(
+            (p) => `
+                <tr class="border-b last:border-0 hover:bg-slate-50 transition">
+                    <td class="py-4 font-bold text-slate-700 text-sm truncate max-w-[150px]">${p.title}</td>
+                    <td class="py-4 text-right flex gap-2 justify-end">
+                        <button onclick='editProject(${JSON.stringify(p)})' class="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-lg text-xs font-bold">Edit</button>
+                        <button onclick="deleteProject(${p.id})" class="text-red-500 text-xs font-bold px-2">Delete</button>
+                    </td>
+                </tr>
+            `,
+          )
+          .join("");
+      }
 
-            // PROJECTS
-            async function fetchManageProjects() {
-              const res = await fetch("/api/projects");
-              const data = await res.json();
-              document.getElementById("manage-project-list").innerHTML = data
-                .map(
-                  (p) => `
-                      <tr class="border-b last:border-0 hover:bg-slate-50 transition">
-                          <td class="py-4 font-bold text-slate-700 text-sm truncate max-w-[150px]">${p.title}</td>
-                          <td class="py-4 text-right flex gap-2 justify-end">
-                              <button onclick='editProject(${JSON.stringify(p)})' class="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-lg text-xs font-bold">Edit</button>
-                              <button onclick="deleteProject(${p.id})" class="text-red-500 text-xs font-bold px-2">Delete</button>
-                          </td>
-                      </tr>
-                  `,
-                )
-                .join("");
-            }
+      function editProject(p) {
+        document.getElementById("edit-id").value = p.id;
+        document.getElementById("p-title").value = p.title;
+        document.getElementById("p-desc").value = p.description;
+        document.getElementById("p-tags").value = p.tags;
+        document.getElementById("p-img").value = p.image_url;
+        document.getElementById("p-link").value = p.link;
+        document.getElementById("menu-selector").value = "editor";
+        switchTab("editor");
+        document.getElementById("submit-btn").innerText = "Update Project";
+        document.getElementById("cancel-btn").classList.remove("hidden");
+      }
 
-            function editProject(p) {
-              document.getElementById("edit-id").value = p.id;
-              document.getElementById("p-title").value = p.title;
-              document.getElementById("p-desc").value = p.description;
-              document.getElementById("p-tags").value = p.tags;
-              document.getElementById("p-img").value = p.image_url;
-              document.getElementById("p-link").value = p.link;
-              document.getElementById("menu-selector").value = "editor";
-              switchTab("editor");
-              document.getElementById("submit-btn").innerText = "Update Project";
-              document.getElementById("cancel-btn").classList.remove("hidden");
-            }
+      function resetForm() {
+        document.getElementById("uploadForm").reset();
+        document.getElementById("edit-id").value = "";
+        document.getElementById("submit-btn").innerText = "Save Project";
+        document.getElementById("cancel-btn").classList.add("hidden");
+      }
 
-            function resetForm() {
-              document.getElementById("uploadForm").reset();
-              document.getElementById("edit-id").value = "";
-              document.getElementById("submit-btn").innerText = "Save Project";
-              document.getElementById("cancel-btn").classList.add("hidden");
-            }
-
-            async function deleteProject(id) {
-              if (confirm("Delete?")) {
-                await fetch(`/api/projects/${id}`, { method: "DELETE" });
-                fetchManageProjects();
-              }
-            }
-
-            // document.getElementById("uploadForm").onsubmit = async (e) => {
-              e.preventDefault();
-              const id = document.getElementById("edit-id").value;
-              const projectData = {
-                title: document.getElementById("p-title").value,
-                description: document.getElementById("p-desc").value,
-                tags: document.getElementById("p-tags").value,
-                image_url: document.getElementById("p-img").value,
-                link: document.getElementById("p-link").value,
-                category: document.getElementById("p-category").value
-              };
-              await fetch(id ? `/api/projects/${id}` : "/api/projects", {
-                method: id ? "PUT" : "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(projectData),
-              });
-              resetForm();
-              document.getElementById("menu-selector").value = "projects";
-              switchTab("projects");
-              fetchManageProjects();
-            };
-
-          document.getElementById("uploadForm").onsubmit = async (e) => {
-          e.preventDefault();
-          const id = document.getElementById("edit-id").value;
-
-          const projectData = {
-              title: document.getElementById("p-title").value,
-              description: document.getElementById("p-desc").value,
-              tags: document.getElementById("p-tags").value,
-              image_url: document.getElementById("p-img").value,
-              link: document.getElementById("p-link").value,
-              // ត្រូវប្រាកដថាមានជួរខាងក្រោមនេះ ដើម្បីចាប់យក Web ឬ Mobile
-              category: document.getElementById("p-category").value
-          };
-
-          await fetch(id ? `/api/projects/${id}` : "/api/projects", {
-              method: id ? "PUT" : "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(projectData),
-          });
-
-          alert("រក្សាទុកជោគជ័យ! 🚀");
-          resetForm();
-          switchTab("projects"); // ត្រឡប់ទៅមើលបញ្ជីគម្រោង
+      async function deleteProject(id) {
+        if (confirm("Delete?")) {
+          await fetch(`/api/projects/${id}`, { method: "DELETE" });
           fetchManageProjects();
+        }
+      }
+
+      document.getElementById("uploadForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const id = document.getElementById("edit-id").value;
+        const projectData = {
+          title: document.getElementById("p-title").value,
+          description: document.getElementById("p-desc").value,
+          tags: document.getElementById("p-tags").value,
+          image_url: document.getElementById("p-img").value,
+          link: document.getElementById("p-link").value,
+          category: document.getElementById("p-category").value
+        };
+        await fetch(id ? `/api/projects/${id}` : "/api/projects", {
+          method: id ? "PUT" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(projectData),
+        });
+
+        alert("រក្សាទុកជោគជ័យ! 🚀");
+        resetForm();
+        document.getElementById("menu-selector").value = "projects";
+        switchTab("projects");
+        fetchManageProjects();
       };
     </script>
   </body>
