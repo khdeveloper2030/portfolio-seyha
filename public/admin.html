@@ -208,6 +208,15 @@
                 class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
                 required
               />
+              <label class="text-[10px] font-bold text-slate-400 uppercase ml-1">Project Category</label>
+              <select
+                id="p-category"
+                class="w-full p-4 bg-slate-50 border rounded-xl text-sm outline-none"
+              >
+                <option value="Web">🌐 Web Development</option>
+                <option value="Mobile">📱 Mobile Development</option>
+              </select>
+
               <input
                 type="text"
                 id="p-tags"
@@ -289,10 +298,15 @@
     <script>
       // Tab Logic
       function switchTab(tabId) {
-        document
-          .querySelectorAll(".tab-content")
-          .forEach((tab) => tab.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach((tab) => tab.classList.remove("active"));
         document.getElementById("tab-" + tabId).classList.add("active");
+        
+        // បន្ថែមចលនាធ្លាក់ចុះ (Slide Down) ពេលប្តូរ Tab
+        const activeTab = document.getElementById("tab-" + tabId);
+        activeTab.style.animation = 'none';
+        activeTab.offsetHeight; /* trigger reflow */
+        activeTab.style.animation = 'fadeIn 0.4s ease';
+
         if (tabId === "inbox") fetchMessages();
         if (tabId === "projects") fetchManageProjects();
       }

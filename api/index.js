@@ -67,22 +67,19 @@ app.get('/api/projects', async (req, res) => {
 });
 
 app.post('/api/projects', async (req, res) => {
-  const { title, description, tags, link, image_url } = req.body;
-  try {
-    const query = 'INSERT INTO projects (title, description, tags, link, image_url) VALUES ($1, $2, $3, $4, $5) RETURNING *';
-    const values = [title, description, tags, link, image_url];
-    const result = await pool.query(query, values);
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  const { title, description, tags, link, image_url, category } = req.body;
+  const result = await pool.query(
+    'INSERT INTO projects (title, description, tags, link, image_url, category) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+    [title, description, tags, link, image_url, category]
+  );
+  res.status(201).json(result.rows[0]);
 });
 
 app.put('/api/projects/:id', async (req, res) => {
   const { id } = req.params;
   const { title, description, tags, link, image_url } = req.body;
   try {
-    const query = 'UPDATE projects SET title=$1, description=$2, tags=$3, link=$4, image_url=$5 WHERE id=$6';
+    const query = 'UPDATE projects SET title=$1, description=$2, tags=$3, link=$4, image_url=$5, category=$6 WHERE id=$7';
     await pool.query(query, [title, description, tags, link, image_url, id]);
     res.json({ success: true });
   } catch (err) {
